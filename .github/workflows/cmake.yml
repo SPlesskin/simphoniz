@@ -17,13 +17,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Debug
+      shell: bash
+      working-directory: ${{runner.workspace}}
+      run: ls
+
     - name: Install Qt
       shell: bash
       run: sudo apt-get install qt5-default
 
     - name: Make externals build dir
       shell: bash
-      working-directory: ${{runner.workspace}}
+      working-directory: ${{runner.workspace}}/external
       run: mkdir build
 
     - name: Build externals
