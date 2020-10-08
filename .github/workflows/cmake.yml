@@ -23,8 +23,9 @@ jobs:
 
     - name: Build externals
       shell: bash
-      working-directory: ${{runner.workspace}}/external/build
+      working-directory: ${{runner.workspace}}/external
       run: |
+        mkdir build && cd build
         cmake -DEXTERNAL_BUILD_TYPE=Release ..
         make
         
