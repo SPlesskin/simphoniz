@@ -1,5 +1,7 @@
 # Simphoniz
 
+![CMake](https://github.com/Alexis-B/simphoniz/workflows/CMake/badge.svg)
+
 Simphoniz is a command-line tool which allows sorting photos according to their creation time. It
 uses [EXIF metadata](https://en.wikipedia.org/wiki/Exif) to arrange files in a chronological folder
 structure.
