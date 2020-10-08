@@ -25,7 +25,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/external/build
       run: |
-        cmake -DCMAKE_BUILD_TYPE=Release ..
+        cmake -DEXTERNAL_BUILD_TYPE=Release ..
         make
         
     - name: Build
