@@ -23,7 +23,7 @@ jobs:
 
     - name: Make externals build dir
       shell: bash
-      working-directory: ${{runner.workspace}}/external
+      working-directory: ${{runner.workspace}}
       run: mkdir build
 
     - name: Build externals
