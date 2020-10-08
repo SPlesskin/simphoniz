@@ -21,14 +21,21 @@ jobs:
       shell: bash
       run: sudo apt-get install qt5-default
 
-    - name: Build externals
+    - name: Make externals build dir
       shell: bash
       working-directory: ${{runner.workspace}}/external
-      run: |
-        mkdir build && cd build
-        cmake -DEXTERNAL_BUILD_TYPE=Release ..
-        make
-        
+      run: mkdir build
+
+    - name: Build externals
+      shell: bash
+      working-directory: ${{runner.workspace}}/external/build
+      run: cmake -DEXTERNAL_BUILD_TYPE=Release ..
+
+    - name: Make externals
+      shell: bash
+      working-directory: ${{runner.workspace}}/external/build
+      run: make
+
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
