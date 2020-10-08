@@ -19,7 +19,6 @@ jobs:
 
     - name: Debug
       shell: bash
-      working-directory: $GITHUB_WORKSPACE
       run: ls
 
     - name: Install Qt
