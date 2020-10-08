@@ -25,14 +25,14 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/external/build
       run: |
-        cmake -D EXTERNAL_BUILD_TYPE=Release ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         make
         
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
       run: |
-        cmake -D CMAKE_BUILD_TYPE=Release ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         sudo make install
 
     - name: Test
