@@ -19,7 +19,7 @@ jobs:
 
     - name: Debug
       shell: bash
-      working-directory: ${{runner.workspace}}
+      working-directory: ${{GITHUB_WORKSPACE}}
       run: ls
 
     - name: Install Qt
@@ -28,28 +28,28 @@ jobs:
 
     - name: Make externals build dir
       shell: bash
-      working-directory: ${{runner.workspace}}/external
+      working-directory: ${{GITHUB_WORKSPACE}}/external
       run: mkdir build
 
     - name: Build externals
       shell: bash
-      working-directory: ${{runner.workspace}}/external/build
+      working-directory: ${{GITHUB_WORKSPACE}}/external/build
       run: cmake -DEXTERNAL_BUILD_TYPE=Release ..
 
     - name: Make externals
       shell: bash
-      working-directory: ${{runner.workspace}}/external/build
+      working-directory: ${{GITHUB_WORKSPACE}}/external/build
       run: make
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{GITHUB_WORKSPACE}}/build
       shell: bash
       run: |
         cmake -DCMAKE_BUILD_TYPE=Release ..
         sudo make install
 
     - name: Test
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{GITHUB_WORKSPACE}}/build
       shell: bash
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
