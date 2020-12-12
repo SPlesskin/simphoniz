@@ -36,7 +36,7 @@ target_include_directories(${SIMPHONIZ_LIB}
                            SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIRS})
 
 find_package(Qt5 REQUIRED COMPONENTS Core)
-find_package(spdlog REQUIRED CONFIG)
+find_package(Genepy REQUIRED CONFIG)
 find_package(exiv2lib REQUIRED CONFIG NAMES exiv2)
 
 if(UNIX)
@@ -44,12 +44,12 @@ if(UNIX)
     find_package(Iconv REQUIRED)
 
     target_link_libraries(${SIMPHONIZ_LIB}
-                          PUBLIC Qt5::Core spdlog::spdlog
-                          PRIVATE common Iconv::Iconv exiv2lib)
+                          PUBLIC Qt5::Core
+                          PRIVATE common genepy::genepy Iconv::Iconv exiv2lib)
 else()
     target_link_libraries(${SIMPHONIZ_LIB}
-                          PUBLIC Qt5::Core spdlog::spdlog
-                          PRIVATE common exiv2lib)
+                          PUBLIC Qt5::Core
+                          PRIVATE common genepy::genepy exiv2lib)
 endif()
 
 set(SIMPHONIZ_LIB ${SIMPHONIZ_LIB} PARENT_SCOPE)

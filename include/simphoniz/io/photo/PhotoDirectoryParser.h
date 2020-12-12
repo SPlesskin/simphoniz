@@ -26,7 +26,7 @@
 
 #include <memory>
 
-#include "../../log/log_macros.h"
+#include <genepy/log/logging_macros.h>
 
 class QDir;
 class QFileInfo;
@@ -59,7 +59,7 @@ public:
     std::unique_ptr<PhotoDirectory> execute(const QDir& dir) const;
 
 private:
-    SIMPHONIZ_DECLARE_CLASS_LOGGER(logger)
+    GENEPY_DECLARE_CLASS_LOGGER(logger)
 
     PhotoDirectory* parseDir(const QDir& dir) const;
     PhotoFile* parseFile(const QFileInfo& info) const;

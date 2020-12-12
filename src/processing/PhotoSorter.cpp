@@ -55,7 +55,7 @@ QString computeNewFilePath(const PhotoFile& file, const QDir& destinationDir)
 
 } // namespace
 
-SIMPHONIZ_DEFINE_CLASS_LOGGER(PhotoSorter::logger, "PhotoSorter")
+GENEPY_DEFINE_CLASS_LOGGER(PhotoSorter::logger, "PhotoSorter")
 
 PhotoSorter::PhotoSorter(const QDir& destinationDir) : m_DestinationRootDir{destinationDir} {}
 
@@ -81,7 +81,7 @@ void PhotoSorter::visit(const PhotoFile& file)
         date.isValid() ? locale.toString(date, DIR_PATH_FORMAT).toUpper() : DEFAULT_DIRNAME;
 
     if (!m_DestinationRootDir.mkpath(dirPath)) {
-        SIMPHONIZ_LOG_ERROR(logger, "Can't create destination directory for " << filePath)
+        GENEPY_LOG_ERROR(logger(), "Can't create destination directory for " << filePath)
         return;
     }
 
@@ -89,7 +89,7 @@ void PhotoSorter::visit(const PhotoFile& file)
         computeNewFilePath(file, QDir{m_DestinationRootDir.path() + '/' + dirPath});
 
     if (!QFile::rename(filePath, newFilePath)) {
-        SIMPHONIZ_LOG_ERROR(logger, "Can't rename " << filePath)
+        GENEPY_LOG_ERROR(logger(), "Can't rename " << filePath)
     }
 
     emit photoSorted();

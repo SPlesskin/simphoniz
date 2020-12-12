@@ -26,7 +26,8 @@
 
 #include <QtCore/QDir>
 
-#include "../log/log_macros.h"
+#include <genepy/log/logging_macros.h>
+
 #include "PhotoResourceVisitor.h"
 
 namespace simphoniz {
@@ -53,7 +54,7 @@ signals:
     void photoSorted();
 
 private:
-    SIMPHONIZ_DECLARE_CLASS_LOGGER(logger)
+    GENEPY_DECLARE_CLASS_LOGGER(logger)
 
     const QDir m_DestinationRootDir;
 };

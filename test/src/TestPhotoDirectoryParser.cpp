@@ -37,8 +37,8 @@ void TestPhotoDirectoryParser::testExecute_data()
     QTest::addColumn<QDir>("dir");
     QTest::addColumn<QSharedPointer<PhotoDirectory>>("expectedPhotoDir");
 
-    QTest::newRow("non-existent directory") << QDir{m_WorkingDir.path() + QStringLiteral("/a")}
-                                            << QSharedPointer<PhotoDirectory>{};
+    QTest::newRow("non-existent directory")
+        << QDir{m_WorkingDir.path() + QStringLiteral("/a")} << QSharedPointer<PhotoDirectory>{};
 
     {
         const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/a")};

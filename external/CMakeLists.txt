@@ -30,5 +30,4 @@ set(EXTERNAL_BUILD_SHARED OFF)
 set(EXTERNAL_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/external")
 set(EXTERNAL_BUILD_TESTS OFF)
 
-include(spdlog/spdlog_ep.cmake)
 include(exiv2/exiv2_ep.cmake)
