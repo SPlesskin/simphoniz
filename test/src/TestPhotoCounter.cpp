@@ -30,7 +30,7 @@ void TestPhotoCounter::test()
     QCOMPARE(counter.getCount(), 0);
 
     const auto dir = PhotoDirectory{
-        QStringLiteral("a"), new PhotoFile{QStringLiteral("a.jpeg"), QDateTime{QDate{2020, 1, 1}}}};
+        QStringLiteral("a"), new PhotoFile{QStringLiteral("a.jpeg"), QDateTime::currentDateTime()}};
 
     dir.accept(counter);
 
