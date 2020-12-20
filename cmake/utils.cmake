@@ -14,30 +14,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.7)
+function(simphoniz_copy_external_shared_libraries shared_libraries)
+    if(WIN32)
+        foreach(target ${ARGN})
+            # Third-party libraries should be used as imported targets.
+            get_target_property(location ${target} IMPORTED_LOCATION_RELEASE)
 
-project(Simphoniz VERSION 0.1.0 LANGUAGES CXX)
+            # Copy DLL near to the executable(s)
+            file(COPY ${location} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-# Set a default build type if none was specified
-include(cmake/build_type.cmake)
+            list(APPEND ${shared_libraries} ${location})
+        endforeach()
+    endif()
 
-# Define global parameters
-include(cmake/params.cmake)
-
-# Utility CMake functions
-include(cmake/utils.cmake)
-
-# Configure external tools
-include(cmake/external_tools.cmake)
-
-# Set compiler flags
-include(cmake/compiler.cmake)
-
-include(CTest)
-
-add_subdirectory(src)
-add_subdirectory(app)
-add_subdirectory(test)
-
-# Configure the package generators
-include(cmake/package.cmake)
+    set(${shared_libraries} ${${shared_libraries}} PARENT_SCOPE)
+endfunction()

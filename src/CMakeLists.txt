@@ -44,12 +44,18 @@ if(UNIX)
     find_package(Iconv REQUIRED)
 
     target_link_libraries(${SIMPHONIZ_LIB}
-                          PUBLIC Qt5::Core
-                          PRIVATE common genepy::genepy Iconv::Iconv exiv2lib)
+                          PUBLIC Qt5::Core genepy::genepy
+                          PRIVATE common Iconv::Iconv exiv2lib)
 else()
     target_link_libraries(${SIMPHONIZ_LIB}
-                          PUBLIC Qt5::Core
-                          PRIVATE common genepy::genepy exiv2lib)
+                          PUBLIC Qt5::Core genepy::genepy
+                          PRIVATE common exiv2lib)
+
+    # Windows has no RPATH mechanism or equivalent, so it only looks for DLLs in the same directory
+    # as the executable or in the directories listed in the PATH environment variable.
+    simphoniz_copy_external_shared_libraries(SIMPHONIZ_EXTERNAL_SHARED_LIBRARIES genepy::genepy)
+
+    set(SIMPHONIZ_EXTERNAL_SHARED_LIBRARIES ${SIMPHONIZ_EXTERNAL_SHARED_LIBRARIES} PARENT_SCOPE)
 endif()
 
 set(SIMPHONIZ_LIB ${SIMPHONIZ_LIB} PARENT_SCOPE)
