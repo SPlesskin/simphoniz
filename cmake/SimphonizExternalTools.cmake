@@ -14,20 +14,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Enable C++14 and prevent CMake from falling back to a previous standard if the compiler doesn't
-# support the specified one
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Qt
+# ==
+# Build tools
+set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTOUIC ON)
 
-# Disable compiler features which extend the C++ standard for maximum portability
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Set warning flags
-add_library(common INTERFACE)
-if(MSVC)
-    # Note: Qt generates a lot of C4127 warnings; consequently, they are suppressed.
-    target_compile_options(common INTERFACE /WX /W4 /wd4127)
-else()
-    target_compile_options(common INTERFACE -Werror -pedantic-errors -Wall -Wextra -Wconversion
-                                            -Wsign-conversion)
+# Windows deployment tool
+if(WIN32)
+    include(cmake/windeployqt.cmake)
 endif()
+
+# ClangFormat
+# ===========
+include(cmake/SimphonizCodeFormatter.cmake)
+
+# Doxygen
+# =======
+add_subdirectory(doc)

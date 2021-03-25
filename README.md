@@ -6,13 +6,14 @@ structure.
 
 ## Installation
 
-Simphoniz is a [Qt 5](https://www.qt.io/) application which has been developped and tested on Linux
-Debian 9. [CMake](https://cmake.org/) and a C++14 compiler are required to build the project.
+Simphoniz is a [Qt 5](https://www.qt.io/) application which has been developped and mainly tested on
+Linux Debian Stretch (Debian 9). [CMake](https://cmake.org/) and a C++14 compiler are required to
+build the project.
 
 ```bash
 cd external
 mkdir build && cd build
-cmake -D EXTERNAL_BUILD_TYPE=Release ..
+cmake -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
 make
 cd ../..
 mkdir build && cd build

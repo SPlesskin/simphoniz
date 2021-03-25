@@ -15,19 +15,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.7)
-project(external)
+
+project(SimphonizExternal)
 
 include(ExternalProject)
 
-if(NOT EXTERNAL_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(EXTERNAL_BUILD_TYPE Release CACHE STRING "Choose the type of build.")
+if(NOT SIMPHONIZ_EXTERNAL_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(SIMPHONIZ_EXTERNAL_BUILD_TYPE Release CACHE STRING "Choose the type of build.")
     # Set the possible values of build type for the CMake GUI
-    set_property(CACHE EXTERNAL_BUILD_TYPE PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
+    set_property(CACHE SIMPHONIZ_EXTERNAL_BUILD_TYPE PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
 endif()
 
-set(EXTERNAL_BUILD_EXAMPLES OFF)
-set(EXTERNAL_BUILD_SHARED OFF)
-set(EXTERNAL_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/external")
-set(EXTERNAL_BUILD_TESTS OFF)
+set(SIMPHONIZ_EXTERNAL_BUILD_EXAMPLES OFF)
+set(SIMPHONIZ_EXTERNAL_BUILD_SHARED OFF)
+set(SIMPHONIZ_EXTERNAL_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/external")
+set(SIMPHONIZ_EXTERNAL_BUILD_TESTS OFF)
 
-include(exiv2/exiv2_ep.cmake)
+include(exiv2/SimphonizExternalExiv2.cmake)

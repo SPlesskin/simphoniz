@@ -41,6 +41,8 @@ if(UNIX)
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${CPACK_PACKAGE_VENDOR})
     set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 else()
+    string(TOLOWER ${CPACK_PACKAGE_FILE_NAME}-${SIMPHONIZ_COMPILER}-${SIMPHONIZ_TARGET_ARCHITECTURE} CPACK_PACKAGE_FILE_NAME)
+
     option(SIMPHONIZ_USE_NSIS "Use NSIS generator to produce installer" OFF)
 
     if(SIMPHONIZ_USE_NSIS)
@@ -49,15 +51,16 @@ else()
         # Disambiguate the name of the setup file otherwise it can be confused with the executable
         set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_FILE_NAME}-setup")
 
+        # This variable is used within NSIS header file.
         set(CPACK_NSIS_INSTALLED_ICON_NAME "${SIMPHONIZ_PROJECT_NAME_L}.ico")
+
         set(CPACK_NSIS_HELP_LINK "https://github.com/SPlesskin/simphoniz")
         set(CPACK_NSIS_URL_INFO_ABOUT ${CPACK_NSIS_HELP_LINK})
         set(CPACK_NSIS_CONTACT "erwan.grace@outlook.fr")
 
         # Generate header file with custom definitions for NSIS
-        set(nsis_definitions_nsh_in "${SIMPHONIZ_RESOURCE_DIR}/nsis/NSIS.definitions.nsh.in")
-        set(nsis_definitions_nsh "${CMAKE_BINARY_DIR}/resources/nsis/NSIS.definitions.nsh")
-        configure_file(${nsis_definitions_nsh_in} ${nsis_definitions_nsh} @ONLY)
+        configure_file(${SIMPHONIZ_RESOURCE_DIR}/nsis/NSIS.definitions.nsh.in
+                       "${CMAKE_BINARY_DIR}/resources/nsis/NSIS.definitions.nsh" @ONLY)
     else()
         set(CPACK_GENERATOR "ZIP")
     endif()

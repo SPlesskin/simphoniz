@@ -14,7 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-function(simphoniz_copy_external_shared_libraries shared_libraries)
+function(simphoniz_find_qt_include_dir result)
+    find_package(Qt5 REQUIRED COMPONENTS Core)
+    list(GET Qt5Core_INCLUDE_DIRS 0 ${result})
+
+    # Remove unnecessary path separators (e.g., the trailing one)
+    file(TO_CMAKE_PATH "${${result}}" ${result})
+
+    set(${result} ${${result}} PARENT_SCOPE)
+endfunction()
+
+function(simphoniz_copy_external_shared_libraries external_shared_libraries)
     if(WIN32)
         foreach(target ${ARGN})
             # Third-party libraries should be used as imported targets.
@@ -23,9 +33,9 @@ function(simphoniz_copy_external_shared_libraries shared_libraries)
             # Copy DLL near to the executable(s)
             file(COPY ${location} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-            list(APPEND ${shared_libraries} ${location})
+            list(APPEND ${external_shared_libraries} ${location})
         endforeach()
     endif()
 
-    set(${shared_libraries} ${${shared_libraries}} PARENT_SCOPE)
+    set(${external_shared_libraries} ${${external_shared_libraries}} PARENT_SCOPE)
 endfunction()

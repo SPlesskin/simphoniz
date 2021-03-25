@@ -14,26 +14,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(SIMPHONIZ_LIB ${SIMPHONIZ_PROJECT_NAME_L}-api)
+# List the source files
+# =====================
+set(SIMPHONIZ_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
-# Pass application name and version to the source code
-set(application_cpp_in "${SIMPHONIZ_RESOURCE_DIR}/cpp/Application.cpp.in")
-set(application_cpp "${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp")
-configure_file(${application_cpp_in} ${application_cpp} @ONLY)
+configure_file(${SIMPHONIZ_RESOURCE_DIR}/cpp/Application.cpp.in "${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp" @ONLY)
 
-file(GLOB_RECURSE SIMPHONIZ_LIB_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE SIMPHONIZ_LIBRARY_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE SIMPHONIZ_LIBRARY_HEADERS ${SIMPHONIZ_INCLUDE_DIR}/*.h)
 
-set(SIMPHONIZ_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include")
-
-file(GLOB_RECURSE SIMPHONIZ_LIB_HEADERS ${SIMPHONIZ_INCLUDE_DIRS}/*.h)
+# Build the library
+# =================
+set(SIMPHONIZ_LIBRARY ${SIMPHONIZ_PROJECT_NAME_L}-api)
 
 # Although ignored, the headers are listed below so that they show up in IDEs.
-add_library(${SIMPHONIZ_LIB} STATIC ${SIMPHONIZ_LIB_SOURCES} ${SIMPHONIZ_LIB_HEADERS})
+add_library(${SIMPHONIZ_LIBRARY} STATIC ${SIMPHONIZ_LIBRARY_SOURCES} ${SIMPHONIZ_LIBRARY_HEADERS})
 
 # https://foonathan.net/2018/10/cmake-warnings
-target_include_directories(${SIMPHONIZ_LIB}
-                           PRIVATE ${SIMPHONIZ_INCLUDE_DIRS}
-                           SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIRS})
+target_include_directories(${SIMPHONIZ_LIBRARY}
+                           PRIVATE ${SIMPHONIZ_INCLUDE_DIR}
+                           SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIR})
 
 find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Genepy REQUIRED CONFIG)
@@ -43,11 +43,11 @@ if(UNIX)
     # On Linux systems, the iconv library must be linked to when Exiv2 is compiled statically.
     find_package(Iconv REQUIRED)
 
-    target_link_libraries(${SIMPHONIZ_LIB}
+    target_link_libraries(${SIMPHONIZ_LIBRARY}
                           PUBLIC Qt5::Core genepy::genepy
                           PRIVATE common Iconv::Iconv exiv2lib)
 else()
-    target_link_libraries(${SIMPHONIZ_LIB}
+    target_link_libraries(${SIMPHONIZ_LIBRARY}
                           PUBLIC Qt5::Core genepy::genepy
                           PRIVATE common exiv2lib)
 
@@ -58,4 +58,4 @@ else()
     set(SIMPHONIZ_EXTERNAL_SHARED_LIBRARIES ${SIMPHONIZ_EXTERNAL_SHARED_LIBRARIES} PARENT_SCOPE)
 endif()
 
-set(SIMPHONIZ_LIB ${SIMPHONIZ_LIB} PARENT_SCOPE)
+set(SIMPHONIZ_LIBRARY ${SIMPHONIZ_LIBRARY} PARENT_SCOPE)
