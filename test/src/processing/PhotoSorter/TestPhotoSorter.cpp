@@ -21,7 +21,7 @@
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoSorter.h>
 
-#include "common.h"
+#include "../../common.h"
 
 using namespace simphoniz;
 
