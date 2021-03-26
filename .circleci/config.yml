@@ -1,0 +1,282 @@
+version: 2.1
+
+parameters:
+  genepy-version:
+    type: string
+    default: 0.3.0
+
+orbs:
+  windows: circleci/windows@2.4.0
+
+commands:
+  install-qt:
+    description: "A command for installing Qt for Windows"
+    parameters:
+      components:
+        description: "Components selected for installation"
+        type: string
+        default: qt.qt5.5152.win64_msvc2019_64 qt.tools.cmake.win64
+    steps:
+      - run:
+          name: Download Qt Online Installer
+          command: |
+            $ProgressPreference = 'SilentlyContinue'
+            Invoke-WebRequest -URI https://download.qt.io/archive/online_installers/4.0/qt-unified-windows-x86-4.0.1-1-online.exe `
+            -OutFile $Env:HOMEPATH\qt-unified-windows-x86-4.0.1-1-online.exe
+      - run:
+          name: Install Qt
+          command: |
+            & "$Env:HOMEPATH\qt-unified-windows-x86-4.0.1-1-online.exe" install `
+            << parameters.components >> --root C:\Qt --auto-answer telemetry-question=No `
+            --default-answer --accept-licenses --accept-obligations --email $Env:QT_ACCOUNT_EMAIL `
+            --password $Env:QT_ACCOUNT_PASSWORD --confirm-command --no-default-installations `
+            --verbose --mirror http://qt.mirror.constant.com
+
+jobs:
+  linux-build:
+    docker:
+      - image: debian:stretch
+    steps:
+      - run:
+          name: Install build tools
+          command: apt-get update && apt-get install -y git cmake g++ qtdeclarative5-dev
+      - run:
+          name: Install and configure JFrog CLI
+          command: |
+            apt-get update && apt-get install curl
+            curl -fL https://getcli.jfrog.io | sh
+            ./jfrog rt c --url $JFROG_ARTIFACTORY_URL --user $JFROG_USERNAME --password \
+            $JFROG_PASSWORD
+      - run:
+          name: Download (from JFrog) and install Genepy
+          environment:
+            GENEPY_PACKAGE_NAME: genepy_<< pipeline.parameters.genepy-version >>-1_amd64
+          command: |
+            ./jfrog rt dl genepy-linux-release/$GENEPY_PACKAGE_NAME.deb
+            apt-get update && apt-get install -y ./*.deb
+      - checkout
+      - run:
+          name: Compile external dependencies
+          command: |
+            cd external
+            mkdir build && cd build
+            cmake -G "Unix Makefiles" -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+            make
+      - unless:
+          condition:
+            equal: [master, << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: Compile Simphoniz
+                command: |
+                  mkdir build && cd build
+                  cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release ..
+                  make
+            - run:
+                name: Execute tests
+                command: |
+                  cd build
+                  ctest --no-compress-output -T Test || true
+            - run:
+                name: Generate JUnit XML report
+                command: |
+                  apt-get update && apt-get install -y python3 python3-lxml
+                  mkdir build/test-results
+                  python3 resources/scripts/CTest2JUnit/ctest2JUnit.py build \
+                  resources/scripts/CTest2JUnit/CTest2JUnit.xsl > build/test-results/results.xml
+            - store_test_results:
+                path: build/test-results
+      - when:
+          condition:
+            equal: [master, << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: Compile Simphoniz
+                command: |
+                  mkdir build && cd build
+                  cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+                  make
+            - run:
+                name: Generate binary installer
+                command: |
+                  cd build
+                  make package
+                  mkdir installer && mv *.deb installer
+            - run:
+                name: Upload installer to JFrog
+                command: ./jfrog rt u "build/installer/*.deb" simphoniz-linux-release
+            - store_artifacts:
+                path: build/installer
+
+  windows-msvc-build:
+    executor:
+      name: windows/default
+    steps:
+      - install-qt
+      - run:
+          name: Install and configure JFrog CLI
+          command: |
+            choco install jfrog-cli
+            jfrog rt c --url $Env:JFROG_ARTIFACTORY_URL --user $Env:JFROG_USERNAME --password `
+            $Env:JFROG_PASSWORD
+      - run:
+          name: Download (from JFrog) and install Genepy
+          environment:
+            GENEPY_PACKAGE_NAME: genepy-<< pipeline.parameters.genepy-version >>-msvc-x64
+          command: |
+            jfrog rt dl genepy-windows-release/$Env:GENEPY_PACKAGE_NAME.zip
+            Expand-Archive *.zip -DestinationPath $Env:ProgramFiles
+            Rename-Item -Path $Env:ProgramFiles\$Env:GENEPY_PACKAGE_NAME -NewName Genepy
+      - checkout
+      - run:
+          name: Compile external dependencies
+          command: |
+            Install-module posh-vs -Force
+            Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
+            $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+            cd external
+            mkdir build; cd build
+            cmake -G "NMake Makefiles" -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+            nmake
+      - unless:
+          condition:
+            equal: [master, << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: Compile Simphoniz
+                command: |
+                  Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
+                  $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  mkdir build; cd build
+                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release ..
+                  nmake
+            - run:
+                name: Execute tests and generate JUnit XML report
+                command: |
+                  pip install --upgrade pip
+                  pip install lxml
+                  Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
+                  $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  cd build
+                  ctest --no-compress-output -T Test -or True
+                  mkdir test-results
+                  python ..\resources\scripts\CTest2JUnit\ctest2JUnit.py . `
+                  ..\resources\scripts\CTest2JUnit\CTest2JUnit.xsl > test-results\results.xml
+            - store_test_results:
+                path: build/test-results
+      - when:
+          condition:
+            equal: [master, << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: Compile Simphoniz
+                command: |
+                  Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
+                  $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  mkdir build; cd build
+                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+                  nmake
+            - run:
+                name: Generate binary package
+                command: |
+                  Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
+                  $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  cd build
+                  nmake package
+                  mkdir package; mv *.zip package
+            - run:
+                name: Upload package to JFrog
+                command: jfrog rt u "build/package/*.zip" simphoniz-windows-release
+            - store_artifacts:
+                path: build/package
+
+  windows-mingw-build:
+    executor:
+      name: windows/default
+    steps:
+      - install-qt:
+          components: qt.qt5.5152.win64_mingw81 qt.tools.win64_mingw810 qt.tools.cmake.win64
+      - run:
+          name: Install and configure JFrog CLI
+          command: |
+            choco install jfrog-cli
+            jfrog rt c --url $Env:JFROG_ARTIFACTORY_URL --user $Env:JFROG_USERNAME --password `
+            $Env:JFROG_PASSWORD
+      - run:
+          name: Download (from JFrog) and install Genepy
+          environment:
+            GENEPY_PACKAGE_NAME: genepy-<< pipeline.parameters.genepy-version >>-mingw-x64
+          command: |
+            jfrog rt dl genepy-windows-release/$Env:GENEPY_PACKAGE_NAME.zip
+            Expand-Archive *.zip -DestinationPath $Env:ProgramFiles
+            Rename-Item -Path $Env:ProgramFiles\$Env:GENEPY_PACKAGE_NAME -NewName Genepy
+      - checkout
+      - run:
+          name: Compile external dependencies
+          command: |
+            $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+            cd external
+            mkdir build; cd build
+            cmake -G "MinGW Makefiles" -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+            mingw32-make
+      - unless:
+          condition:
+            equal: [master, << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: Compile Simphoniz
+                command: |
+                  $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  mkdir build; cd build
+                  cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release ..
+                  mingw32-make
+            - run:
+                name: Execute tests and generate JUnit XML report
+                command: |
+                  pip install --upgrade pip
+                  pip install lxml
+                  $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  cd build
+                  ctest --no-compress-output -T Test -or True
+                  mkdir test-results
+                  python ..\resources\scripts\CTest2JUnit\ctest2JUnit.py . `
+                  ..\resources\scripts\CTest2JUnit\CTest2JUnit.xsl > test-results\results.xml
+            - store_test_results:
+                path: build/test-results
+      - when:
+          condition:
+            equal: [master, << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: Compile Simphoniz
+                command: |
+                  $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  mkdir build; cd build
+                  cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+                  mingw32-make
+            - run:
+                name: Generate binary package
+                command: |
+                  $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+                  cd build
+                  mingw32-make package
+                  mkdir package; mv *.zip package
+            - run:
+                name: Upload package to JFrog
+                command: jfrog rt u "build/package/*.zip" simphoniz-windows-release
+            - store_artifacts:
+                path: build/package
+
+workflows:
+  genepy:
+    jobs:
+      - linux-build:
+          context: jfrog
+      - windows-msvc-build:
+          context:
+            - qt-project
+            - jfrog
+      - windows-mingw-build:
+          context:
+            - qt-project
+            - jfrog

@@ -1,3 +1,5 @@
+[![SPlesskin](https://circleci.com/gh/SPlesskin/simphoniz.svg?style=svg)](https://circleci.com/gh/SPlesskin/simphoniz)
+
 # Simphoniz
 
 Simphoniz is a command-line tool which allows sorting photos according to their creation time. It
