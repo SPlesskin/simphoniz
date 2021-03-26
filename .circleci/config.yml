@@ -40,6 +40,7 @@ jobs:
       - run:
           name: Install build tools
           command: apt-get update && apt-get install -y git cmake g++ qtdeclarative5-dev
+      - checkout
       - run:
           name: Install and configure JFrog CLI
           command: |
@@ -53,9 +54,7 @@ jobs:
             GENEPY_PACKAGE_NAME: genepy_<< pipeline.parameters.genepy-version >>-1_amd64
           command: |
             ./jfrog rt dl genepy-linux-release/$GENEPY_PACKAGE_NAME.deb
-            chown -Rv _apt:root . && chmod -Rv 700 .
-            apt-get update && apt-get install -y ./*.deb && rm *.deb
-      - checkout
+            apt-get -o APT::Sandbox::User=root update && apt-get install -y ./*.deb
       - run:
           name: Compile external dependencies
           command: |
