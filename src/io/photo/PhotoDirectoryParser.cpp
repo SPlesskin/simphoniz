@@ -61,14 +61,14 @@ QDateTime findPhotoCreationDate(const Exiv2::ExifData& data)
 
 } // namespace
 
-SIMPHONIZ_DEFINE_CLASS_LOGGER(PhotoDirectoryParser::logger, "PhotoDirectoryParser")
+GENEPY_DEFINE_CLASS_LOGGER(PhotoDirectoryParser::logger, "PhotoDirectoryParser")
 
 PhotoDirectoryParser::PhotoDirectoryParser() {}
 
 std::unique_ptr<PhotoDirectory> PhotoDirectoryParser::execute(const QDir& dir) const
 {
     if (!dir.exists()) {
-        SIMPHONIZ_LOG_ERROR(logger, "Can't find directory " << dir.absolutePath())
+        GENEPY_LOG_ERROR(logger(), "Can't find directory " << dir.absolutePath())
         return std::unique_ptr<PhotoDirectory>{};
     }
 
@@ -77,7 +77,7 @@ std::unique_ptr<PhotoDirectory> PhotoDirectoryParser::execute(const QDir& dir) c
 
 PhotoDirectory* PhotoDirectoryParser::parseDir(const QDir& dir) const
 {
-    SIMPHONIZ_LOG_DEBUG(logger, "Parsing directory " << dir.absolutePath() << "...")
+    GENEPY_LOG_DEBUG(logger(), "Parsing directory " << dir.absolutePath() << "...")
 
     // Initialization
     PhotoDirectory* result = nullptr;
@@ -105,7 +105,7 @@ PhotoDirectory* PhotoDirectoryParser::parseDir(const QDir& dir) const
 
 PhotoFile* PhotoDirectoryParser::parseFile(const QFileInfo& info) const
 {
-    SIMPHONIZ_LOG_DEBUG(logger, "Parsing file " << info.absoluteFilePath() << "...")
+    GENEPY_LOG_DEBUG(logger(), "Parsing file " << info.absoluteFilePath() << "...")
 
     if (!isFileNameExtensionValid(info.suffix())) {
         return nullptr;
@@ -117,25 +117,25 @@ PhotoFile* PhotoDirectoryParser::parseFile(const QFileInfo& info) const
 
         const auto& exifData = image->exifData();
         if (exifData.empty()) {
-            SIMPHONIZ_LOG_WARN(logger, "No EXIF data found in " << info.absoluteFilePath())
+            GENEPY_LOG_WARN(logger(), "No EXIF data found in " << info.absoluteFilePath())
             return nullptr;
         }
 
         // Retrieve the creation date of the photo
         const auto creationDate = findPhotoCreationDate(exifData);
         if (!creationDate.isValid()) {
-            SIMPHONIZ_LOG_WARN(logger, "Can't get creation date of " << info.absoluteFilePath());
+            GENEPY_LOG_WARN(logger(), "Can't get creation date of " << info.absoluteFilePath());
         }
         else {
-            SIMPHONIZ_LOG_DEBUG(logger, "Creation date: " << creationDate.toString(
-                                            QStringLiteral("yyyy/MM/dd hh:mm:ss")))
+            GENEPY_LOG_DEBUG(logger(), "Creation date: " << creationDate.toString(
+                                           QStringLiteral("yyyy/MM/dd hh:mm:ss")))
         }
 
         return new PhotoFile{info.fileName(), creationDate};
     }
     catch (const Exiv2::Error& e) {
-        SIMPHONIZ_LOG_ERROR(logger, "Error when reading metadata of " << info.absoluteFilePath()
-                                                                      << ": " << e.what())
+        GENEPY_LOG_ERROR(logger(), "Error when reading metadata of " << info.absoluteFilePath()
+                                                                     << ": " << e.what())
         return nullptr;
     }
 }

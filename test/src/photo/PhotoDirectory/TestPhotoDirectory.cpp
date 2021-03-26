@@ -27,7 +27,7 @@ void TestPhotoDirectory::testEqualityOperator()
     {
         const auto path = QStringLiteral("a");
         const auto name = QStringLiteral("a.jpeg");
-        const auto date = QDateTime{QDate{2020, 1, 1}};
+        const auto date = QDateTime::currentDateTime();
 
         const auto dir1 = PhotoDirectory{path, new PhotoFile{name, date}};
         const auto dir2 = PhotoDirectory{path, new PhotoFile{name, date}};
@@ -37,7 +37,7 @@ void TestPhotoDirectory::testEqualityOperator()
 
     {
         const auto name = QStringLiteral("a.jpeg");
-        const auto date = QDateTime{QDate{2020, 1, 1}};
+        const auto date = QDateTime::currentDateTime();
 
         const auto dir1 = PhotoDirectory{QStringLiteral("a"), new PhotoFile{name, date}};
         const auto dir2 = PhotoDirectory{QStringLiteral("b"), new PhotoFile{name, date}};
@@ -48,7 +48,7 @@ void TestPhotoDirectory::testEqualityOperator()
     {
         const auto path = QStringLiteral("a");
         const auto name = QStringLiteral("a.jpeg");
-        const auto date = QDateTime{QDate{2020, 1, 1}};
+        const auto date = QDateTime::currentDateTime();
 
         const auto dir1 = PhotoDirectory{path, new PhotoFile{name, date}};
         const auto dir2 =
@@ -59,7 +59,7 @@ void TestPhotoDirectory::testEqualityOperator()
 
     {
         const auto path = QStringLiteral("a");
-        const auto date = QDateTime{QDate{2020, 1, 1}};
+        const auto date = QDateTime::currentDateTime();
 
         const auto dir1 = PhotoDirectory{path, new PhotoFile{QStringLiteral("a.jpeg"), date}};
         const auto dir2 = PhotoDirectory{path, new PhotoFile{QStringLiteral("b.jpeg"), date}};

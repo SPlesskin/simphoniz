@@ -15,17 +15,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTEXCEPTION_H
-#define TESTEXCEPTION_H
+#include "TestPhotoCounter.h"
 
-#include <QtTest/QtTest>
+#include <simphoniz/photo/PhotoDirectory.h>
+#include <simphoniz/photo/PhotoFile.h>
+#include <simphoniz/processing/PhotoCounter.h>
 
-class TestException : public QObject {
+using namespace simphoniz;
 
-    Q_OBJECT
+void TestPhotoCounter::test()
+{
+    PhotoCounter counter;
 
-private slots:
-    void testMacro();
-};
+    QCOMPARE(counter.getCount(), 0);
 
-#endif // TESTEXCEPTION_H
+    const auto dir = PhotoDirectory{
+        QStringLiteral("a"), new PhotoFile{QStringLiteral("a.jpeg"), QDateTime::currentDateTime()}};
+
+    dir.accept(counter);
+
+    QCOMPARE(counter.getCount(), 1);
+}
+
+QTEST_MAIN(TestPhotoCounter)

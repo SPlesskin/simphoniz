@@ -25,7 +25,7 @@ void TestPhotoFile::testEqualityOperator()
 {
     {
         const auto name = QStringLiteral("a.jpeg");
-        const auto date = QDateTime{QDate{2020, 1, 1}};
+        const auto date = QDateTime::currentDateTime();
 
         const auto photo1 = PhotoFile{name, date};
         const auto photo2 = PhotoFile{name, date};
@@ -43,7 +43,7 @@ void TestPhotoFile::testEqualityOperator()
     }
 
     {
-        const auto date = QDateTime{QDate{2020, 1, 1}};
+        const auto date = QDateTime::currentDateTime();
 
         const auto photo1 = PhotoFile{QStringLiteral("a.jpeg"), date};
         const auto photo2 = PhotoFile{QStringLiteral("b.jpeg"), date};
@@ -54,8 +54,8 @@ void TestPhotoFile::testEqualityOperator()
     {
         const auto name = QStringLiteral("a.jpeg");
 
-        const auto photo1 = PhotoFile{name, QDateTime{QDate{2020, 1, 1}}};
-        const auto photo2 = PhotoFile{name, QDateTime{QDate{2020, 1, 2}}};
+        const auto photo1 = PhotoFile{name, QDateTime{QDate{2020, 1, 1}, QTime{0, 0}}};
+        const auto photo2 = PhotoFile{name, QDateTime{QDate{2020, 1, 2}, QTime{0, 0}}};
 
         QVERIFY(photo1 != photo2);
     }

@@ -24,12 +24,13 @@
 #include <cstdio>
 #include <iostream>
 
+#include <genepy/log/Logger.h>
+
 #include <simphoniz/Application.h>
 #include <simphoniz/io/console/CommandLineData.h>
 #include <simphoniz/io/console/CommandLineParser.h>
 #include <simphoniz/io/console/ProgressBar.h>
 #include <simphoniz/io/photo/PhotoDirectoryParser.h>
-#include <simphoniz/log/LogManager.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoCounter.h>
 #include <simphoniz/processing/PhotoSorter.h>
@@ -78,7 +79,8 @@ int main(int argc, char** argv)
     /********************************************
      * Initialize the logging system
      ********************************************/
-    LogManager::getInstance().initialize();
+    genepy::Logger::initialize(Application::applicationName(),
+                               QVersionNumber::fromString(Application::applicationVersion()));
 
     /********************************************
      * Search for the photos to sort

@@ -14,33 +14,41 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(SIMPHONIZ_APP ${SIMPHONIZ_PROJECT_NAME_L})
+# List the source files
+# =====================
+file(GLOB_RECURSE SIMPHONIZ_APPLICATION_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE SIMPHONIZ_APPLICATION_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
-file(GLOB_RECURSE SIMPHONIZ_APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-file(GLOB_RECURSE SIMPHONIZ_APP_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+# Build the application
+# =====================
+set(SIMPHONIZ_APPLICATION ${SIMPHONIZ_PROJECT_NAME_L})
 
-add_executable(${SIMPHONIZ_APP} ${SIMPHONIZ_APP_SOURCES} ${SIMPHONIZ_APP_HEADERS})
+add_executable(${SIMPHONIZ_APPLICATION} ${SIMPHONIZ_APPLICATION_SOURCES} ${SIMPHONIZ_APPLICATION_HEADERS})
+
+# Store the executable name in a global variable
+set(SIMPHONIZ_EXECUTABLE_NAME ${SIMPHONIZ_APPLICATION}${CMAKE_EXECUTABLE_SUFFIX} PARENT_SCOPE)
 
 # Since CMake 3.14, Qt5Core_VERSION_MAJOR/MINOR variables must be set to run Qt moc/rcc/uic. These
 # are usually set by find_package(Qt5...) calls.
 find_package(Qt5 REQUIRED COMPONENTS Core)
 
-target_link_libraries(${SIMPHONIZ_APP} PRIVATE common ${SIMPHONIZ_LIB})
+target_link_libraries(${SIMPHONIZ_APPLICATION} PRIVATE common ${SIMPHONIZ_LIBRARY})
 
-install(TARGETS ${SIMPHONIZ_APP} DESTINATION ${SIMPHONIZ_INSTALL_BIN_DIR})
+# Install application
+# ===================
+install(TARGETS ${SIMPHONIZ_APPLICATION} DESTINATION ${SIMPHONIZ_RUNTIME_INSTALL_DIR})
 
 if(WIN32)
     if(MINGW)
-        get_filename_component(mingw_bin_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
-        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${mingw_bin_dir}/libgcc_s_seh-1.dll")
-        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${mingw_bin_dir}/libwinpthread-1.dll")
-        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${mingw_bin_dir}/libstdc++-6.dll")
+        get_filename_component(SIMPHONIZ_MINGW_BIN_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
+        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libgcc_s_seh-1.dll")
+        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libwinpthread-1.dll")
+        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libstdc++-6.dll")
     endif()
 
     # Install the Qt-related dependencies (libraries, plugins...) as well as the compiler runtime
     # libraries near to the executable
-    windeployqt(${SIMPHONIZ_APP} ${SIMPHONIZ_INSTALL_BIN_DIR})
-endif()
+    windeployqt(${SIMPHONIZ_APPLICATION} ${SIMPHONIZ_RUNTIME_INSTALL_DIR})
 
-# Store the executable name in a global variable
-set(SIMPHONIZ_EXE_NAME ${SIMPHONIZ_APP}${CMAKE_EXECUTABLE_SUFFIX} PARENT_SCOPE)
+    install(FILES ${SIMPHONIZ_EXTERNAL_SHARED_LIBRARIES} DESTINATION ${SIMPHONIZ_RUNTIME_INSTALL_DIR})
+endif()
