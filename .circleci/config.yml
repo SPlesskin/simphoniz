@@ -53,7 +53,8 @@ jobs:
             GENEPY_PACKAGE_NAME: genepy_<< pipeline.parameters.genepy-version >>-1_amd64
           command: |
             ./jfrog rt dl genepy-linux-release/$GENEPY_PACKAGE_NAME.deb
-            apt-get update && apt-get install -y ./*.deb
+            chown -Rv _apt:root . && chmod -Rv 700 .
+            apt-get update && apt-get install -y ./*.deb && rm *.deb
       - checkout
       - run:
           name: Compile external dependencies
@@ -127,6 +128,7 @@ jobs:
             jfrog rt dl genepy-windows-release/$Env:GENEPY_PACKAGE_NAME.zip
             Expand-Archive *.zip -DestinationPath $Env:ProgramFiles
             Rename-Item -Path $Env:ProgramFiles\$Env:GENEPY_PACKAGE_NAME -NewName Genepy
+            Remove-Item *.zip
       - checkout
       - run:
           name: Compile external dependencies
@@ -210,6 +212,7 @@ jobs:
             jfrog rt dl genepy-windows-release/$Env:GENEPY_PACKAGE_NAME.zip
             Expand-Archive *.zip -DestinationPath $Env:ProgramFiles
             Rename-Item -Path $Env:ProgramFiles\$Env:GENEPY_PACKAGE_NAME -NewName Genepy
+            Remove-Item *.zip
       - checkout
       - run:
           name: Compile external dependencies
@@ -268,7 +271,7 @@ jobs:
                 path: build/package
 
 workflows:
-  genepy:
+  simphoniz:
     jobs:
       - linux-build:
           context: jfrog
