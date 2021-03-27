@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Install and configure JFrog CLI
           command: |
-            apt-get update && apt-get install curl
+            apt-get update && apt-get install -y curl
             curl -fL https://getcli.jfrog.io | sh
             ./jfrog rt c --url $JFROG_ARTIFACTORY_URL --user $JFROG_USERNAME --password \
             $JFROG_PASSWORD
@@ -54,7 +54,7 @@ jobs:
             GENEPY_PACKAGE_NAME: genepy_<< pipeline.parameters.genepy-version >>-1_amd64
           command: |
             ./jfrog rt dl genepy-linux-release/$GENEPY_PACKAGE_NAME.deb
-            apt-get -o APT::Sandbox::User=root update && apt-get install -y ./*.deb
+            apt-get update && apt-get install -y ./*.deb
       - run:
           name: Compile external dependencies
           command: |
@@ -99,6 +99,7 @@ jobs:
             - run:
                 name: Generate binary installer
                 command: |
+                  apt-get update && apt-get install -y dpkg-dev
                   cd build
                   make package
                   mkdir installer && mv *.deb installer
