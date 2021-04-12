@@ -24,12 +24,12 @@
 #include <cstdio>
 #include <iostream>
 
+#include <genepy/cli/ProgressBar.h>
 #include <genepy/log/Logger.h>
 
 #include <simphoniz/Application.h>
 #include <simphoniz/io/console/CommandLineData.h>
 #include <simphoniz/io/console/CommandLineParser.h>
-#include <simphoniz/io/console/ProgressBar.h>
 #include <simphoniz/io/photo/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoCounter.h>
@@ -103,9 +103,10 @@ int main(int argc, char** argv)
     std::cout << "Processing " << count << " photo(s)..." << std::endl;
 
     PhotoSorter sorter{data.destinationDir};
-    ProgressBar progressBar{count};
+    genepy::ProgressBar progressBar{count};
 
-    QObject::connect(&sorter, &PhotoSorter::photoSorted, &progressBar, &ProgressBar::update);
+    QObject::connect(&sorter, &PhotoSorter::photoSorted, &progressBar,
+                     &genepy::ProgressBar::update);
 
     photoDir->accept(sorter);
 
