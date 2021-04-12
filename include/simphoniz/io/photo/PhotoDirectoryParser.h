@@ -37,6 +37,10 @@ class PhotoDirectory;
 class PhotoFile;
 
 /**
+ * @defgroup io I/O
+ */
+
+/**
  * @defgroup photo-io Photo
  * @ingroup io
  */

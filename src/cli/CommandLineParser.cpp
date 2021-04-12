@@ -24,20 +24,20 @@
 #include <QtCore/QVector>
 
 #include <simphoniz/Application.h>
-#include <simphoniz/io/console/CommandLineData.h>
-#include <simphoniz/io/console/CommandLineParser.h>
+#include <simphoniz/cli/CommandLineData.h>
+#include <simphoniz/cli/CommandLineParser.h>
 
 namespace simphoniz {
 
 namespace {
 
-const auto SOURCE_ARGUMENT_NAME = QStringLiteral("source");
-const auto SOURCE_ARGUMENT_DESCRIPTION = QStringLiteral("The unsorted photo directory.");
-const auto SOURCE_ARGUMENT_SYNTAX = QStringLiteral("<source>");
-const auto DESTINATION_ARGUMENT_NAME = QStringLiteral("destination");
-const auto DESTINATION_ARGUMENT_DESCRIPTION = QStringLiteral("The sorted photo directory.");
-const auto DESTINATION_ARGUMENT_SYNTAX = QStringLiteral("<destination>");
-const auto N_MANDATORY_ARGUMENTS = 2;
+const auto kSourceArgumentName = QStringLiteral("source");
+const auto kSourceArgumentDescription = QStringLiteral("The unsorted photo directory.");
+const auto kSourceArgumentSyntax = QStringLiteral("<source>");
+const auto kDestinationArgumentName = QStringLiteral("destination");
+const auto kDestinationArgumentDescription = QStringLiteral("The sorted photo directory.");
+const auto kDestinationArgumentSyntax = QStringLiteral("<destination>");
+const auto kNMandatoryArguments = 2;
 
 QString getApplicationDescription()
 {
@@ -48,47 +48,46 @@ QString getApplicationDescription()
 } // namespace
 
 CommandLineParser::CommandLineParser()
-    : m_HelpOption{addHelpOption()}, m_VersionOption{addVersionOption()}
+    : helpOption_{addHelpOption()}, versionOption_{addVersionOption()}
 {
     setApplicationDescription(getApplicationDescription());
 
     setSingleDashWordOptionMode(ParseAsLongOptions);
 
-    addPositionalArgument(SOURCE_ARGUMENT_NAME, SOURCE_ARGUMENT_DESCRIPTION,
-                          SOURCE_ARGUMENT_SYNTAX);
-    addPositionalArgument(DESTINATION_ARGUMENT_NAME, DESTINATION_ARGUMENT_DESCRIPTION,
-                          DESTINATION_ARGUMENT_SYNTAX);
+    addPositionalArgument(kSourceArgumentName, kSourceArgumentDescription, kSourceArgumentSyntax);
+    addPositionalArgument(kDestinationArgumentName, kDestinationArgumentDescription,
+                          kDestinationArgumentSyntax);
 }
 
 CommandLineParsingResult CommandLineParser::doParsing(CommandLineData& data, QString& errorMessage)
 {
     if (!parse(Application::arguments())) {
         errorMessage = errorText();
-        return CommandLineParsingResult::KO;
+        return CommandLineParsingResult::kKo;
     }
 
     // Process the optional arguments
-    if (isSet(m_HelpOption)) {
-        return CommandLineParsingResult::HELP_REQUESTED;
+    if (isSet(helpOption_)) {
+        return CommandLineParsingResult::kHelpRequested;
     }
 
-    if (isSet(m_VersionOption)) {
-        return CommandLineParsingResult::VERSION_REQUESTED;
+    if (isSet(versionOption_)) {
+        return CommandLineParsingResult::kVersionRequested;
     }
 
     // Process the mandatory arguments
     const auto args = positionalArguments();
-    if (args.size() != N_MANDATORY_ARGUMENTS) {
-        errorMessage = (args.size() < N_MANDATORY_ARGUMENTS)
+    if (args.size() != kNMandatoryArguments) {
+        errorMessage = (args.size() < kNMandatoryArguments)
                            ? QStringLiteral("The source or destination directory is missing.")
                            : QStringLiteral("Too many directories passed.");
-        return CommandLineParsingResult::KO;
+        return CommandLineParsingResult::kKo;
     }
 
     data.sourceDir.setPath(args.first());
     data.destinationDir.setPath(args.last());
 
-    return CommandLineParsingResult::OK;
+    return CommandLineParsingResult::kOk;
 }
 
 } // namespace simphoniz

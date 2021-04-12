@@ -37,8 +37,8 @@ namespace {
 
 bool isFileNameExtensionValid(const QString& extension)
 {
-    for (auto it = std::cbegin(PhotoFile::FILENAME_EXTENSIONS);
-         it != std::cend(PhotoFile::FILENAME_EXTENSIONS); ++it) {
+    for (auto it = std::cbegin(PhotoFile::kFilenameExtensions);
+         it != std::cend(PhotoFile::kFilenameExtensions); ++it) {
         if (QString::compare(extension, *it, Qt::CaseInsensitive) == 0) {
             return true;
         }
@@ -49,14 +49,14 @@ bool isFileNameExtensionValid(const QString& extension)
 
 QDateTime findPhotoCreationDate(const Exiv2::ExifData& data)
 {
-    const auto key = Exiv2::ExifKey{exif::key::DATE_TIME_ORIGINAL};
+    const auto key = Exiv2::ExifKey{exif::key::kDateTimeOriginal};
     const auto it = data.findKey(key);
     if (it == data.end()) {
         return QDateTime{}; // Return an invalid date
     }
 
     return QDateTime::fromString(QString::fromStdString(it->toString()),
-                                 exif::value::DATE_TIME_ORIGINAL_FORMAT);
+                                 exif::value::kDateTimeOriginalFormat);
 }
 
 } // namespace

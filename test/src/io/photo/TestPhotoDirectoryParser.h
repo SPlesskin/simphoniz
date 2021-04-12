@@ -15,28 +15,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @file CommandLineParsingResult.h
- * @author Erwan
- * @date 01/11/2019
- */
+#ifndef TESTPHOTODIRECTORYPARSER_H
+#define TESTPHOTODIRECTORYPARSER_H
 
-#ifndef SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
-#define SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
+#include <QtTest/QtTest>
 
-namespace simphoniz {
+class TestPhotoDirectoryParser : public QObject {
 
-/**
- * @brief Defines the possible outcomes of the command-line parsing.
- * @ingroup console
- */
-enum class CommandLineParsingResult {
-    OK,               ///< The parsing succeeded.
-    KO,               ///< The parsing failed.
-    HELP_REQUESTED,   ///< The help option was present.
-    VERSION_REQUESTED ///< The version option was present.
+    Q_OBJECT
+
+private slots:
+    void initTestCase();
+    void testExecute_data();
+    void testExecute();
+
+private:
+    QTemporaryDir workingDir_;
 };
 
-} // namespace simphoniz
-
-#endif // SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
+#endif // TESTPHOTODIRECTORYPARSER_H

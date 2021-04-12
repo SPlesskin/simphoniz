@@ -15,22 +15,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTPHOTODIRECTORYPARSER_H
-#define TESTPHOTODIRECTORYPARSER_H
+#ifndef TESTPHOTOSORTER_H
+#define TESTPHOTOSORTER_H
 
 #include <QtTest/QtTest>
 
-class TestPhotoDirectoryParser : public QObject {
+class TestPhotoSorter : public QObject {
 
     Q_OBJECT
 
 private slots:
     void initTestCase();
-    void testExecute_data();
-    void testExecute();
+    void cleanup();
+    void test_data();
+    void test();
 
 private:
-    QTemporaryDir m_WorkingDir;
+    QTemporaryDir workingDir_;
+    QDir destinationDir_;
 };
 
-#endif // TESTPHOTODIRECTORYPARSER_H
+#endif // TESTPHOTOSORTER_H

@@ -29,13 +29,13 @@ namespace exif {
 
 namespace key {
 
-const std::string DATE_TIME_ORIGINAL = "Exif.Photo.DateTimeOriginal";
+const std::string kDateTimeOriginal = "Exif.Photo.DateTimeOriginal";
 
 } // namespace key
 
 namespace value {
 
-const QString DATE_TIME_ORIGINAL_FORMAT = QStringLiteral("yyyy:MM:dd hh:mm:ss");
+const QString kDateTimeOriginalFormat = QStringLiteral("yyyy:MM:dd hh:mm:ss");
 
 } // namespace value
 

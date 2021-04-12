@@ -33,17 +33,12 @@ namespace simphoniz {
 struct CommandLineData;
 
 /**
- * @defgroup io I/O
- */
-
-/**
- * @defgroup console Console
- * @ingroup io
+ * @defgroup cli Command-Line Interface
  */
 
 /**
  * @brief Parses the command line.
- * @ingroup console
+ * @ingroup cli
  */
 class CommandLineParser : public QCommandLineParser {
 public:
@@ -59,8 +54,8 @@ public:
     CommandLineParsingResult doParsing(CommandLineData& data, QString& errorMessage);
 
 private:
-    const QCommandLineOption m_HelpOption;
-    const QCommandLineOption m_VersionOption;
+    const QCommandLineOption helpOption_;
+    const QCommandLineOption versionOption_;
 };
 
 } // namespace simphoniz

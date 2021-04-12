@@ -21,7 +21,7 @@
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoSorter.h>
 
-#include "../../common.h"
+#include "../common.h"
 
 using namespace simphoniz;
 
@@ -39,14 +39,14 @@ bool isDirectoryEmpty(const QString& dirPath)
 
 void TestPhotoSorter::initTestCase()
 {
-    QVERIFY(m_WorkingDir.isValid());
+    QVERIFY(workingDir_.isValid());
 
-    qDebug() << "Working directory:" << m_WorkingDir.path();
+    qDebug() << "Working directory:" << workingDir_.path();
 
-    m_DestinationDir.setPath(m_WorkingDir.path() + QStringLiteral("/Photos"));
+    destinationDir_.setPath(workingDir_.path() + QStringLiteral("/Photos"));
 }
 
-void TestPhotoSorter::cleanup() { QVERIFY(m_DestinationDir.removeRecursively()); }
+void TestPhotoSorter::cleanup() { QVERIFY(destinationDir_.removeRecursively()); }
 
 void TestPhotoSorter::test_data()
 {
@@ -54,12 +54,12 @@ void TestPhotoSorter::test_data()
     QTest::addColumn<QStringList>("sortedPhotoPaths");
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/a")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/a")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("antelope-canyon.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + fileName));
 
@@ -67,17 +67,17 @@ void TestPhotoSorter::test_data()
 
         QTest::newRow("directory with dated photo")
             << QSharedPointer<PhotoDirectory>{photoDir.release()}
-            << QStringList{m_DestinationDir.path() +
+            << QStringList{destinationDir_.path() +
                            QStringLiteral("/2005/10 OCT/20051020-150619.jpeg")};
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/b")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/b")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("tractor.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + fileName));
 
@@ -85,16 +85,16 @@ void TestPhotoSorter::test_data()
 
         QTest::newRow("directory with undated photo")
             << QSharedPointer<PhotoDirectory>{photoDir.release()}
-            << QStringList{m_DestinationDir.path() + QStringLiteral("/Unsorted/tractor.jpeg")};
+            << QStringList{destinationDir_.path() + QStringLiteral("/Unsorted/tractor.jpeg")};
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/c")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/c")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("antelope-canyon.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + QStringLiteral("/a.jpeg")));
         QVERIFY(file.copy(dir.path() + QStringLiteral("/b.jpeg")));
@@ -103,9 +103,9 @@ void TestPhotoSorter::test_data()
 
         QTest::newRow("directory with duplicate photos")
             << QSharedPointer<PhotoDirectory>{photoDir.release()}
-            << (QStringList{m_DestinationDir.path() +
+            << (QStringList{destinationDir_.path() +
                             QStringLiteral("/2005/10 OCT/20051020-150619.jpeg")}
-                << m_DestinationDir.path() +
+                << destinationDir_.path() +
                        QStringLiteral("/2005/10 OCT/20051020-150619 [1].jpeg"));
     }
 }
@@ -115,7 +115,7 @@ void TestPhotoSorter::test()
     QFETCH(QSharedPointer<PhotoDirectory>, photoDir);
     QFETCH(QStringList, sortedPhotoPaths);
 
-    PhotoSorter sorter{m_DestinationDir};
+    PhotoSorter sorter{destinationDir_};
     photoDir->accept(sorter);
 
     for (const auto& path : sortedPhotoPaths) {

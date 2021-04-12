@@ -26,16 +26,16 @@
 
 namespace simphoniz {
 
-const QStringList PhotoFile::FILENAME_EXTENSIONS = QStringList{"jpeg", "jpg"};
+const QStringList PhotoFile::kFilenameExtensions = QStringList{"jpeg", "jpg"};
 
 PhotoFile::PhotoFile(const QString& name, const QDateTime& creationDate)
-    : m_Name{name}, m_CreationDate{creationDate}
+    : name_{name}, creationDate_{creationDate}
 {
 }
 
-QString PhotoFile::getName() const { return m_Name; }
-QString PhotoFile::getBaseName() const { return m_Name.section('.', 0, 0); }
-QDateTime PhotoFile::getCreationDate() const { return m_CreationDate; }
+QString PhotoFile::getName() const { return name_; }
+QString PhotoFile::getBaseName() const { return name_.section('.', 0, 0); }
+QDateTime PhotoFile::getCreationDate() const { return creationDate_; }
 
 void PhotoFile::accept(PhotoResourceVisitor& visitor) const { visitor.visit(*this); }
 
@@ -43,7 +43,7 @@ bool PhotoFile::isEqual(const PhotoResource& other) const
 {
     const auto& obj = static_cast<const PhotoFile&>(other);
 
-    return m_Name == obj.m_Name && m_CreationDate == obj.m_CreationDate;
+    return name_ == obj.name_ && creationDate_ == obj.creationDate_;
 }
 
 } // namespace simphoniz

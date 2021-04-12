@@ -32,13 +32,13 @@ namespace exif {
 
 namespace key {
 
-extern const std::string DATE_TIME_ORIGINAL;
+extern const std::string kDateTimeOriginal;
 
 } // namespace key
 
 namespace value {
 
-extern const QString DATE_TIME_ORIGINAL_FORMAT;
+extern const QString kDateTimeOriginalFormat;
 
 } // namespace value
 

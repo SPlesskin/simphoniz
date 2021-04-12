@@ -38,7 +38,7 @@ namespace simphoniz {
 class PhotoFile : public PhotoResource {
 public:
     /// The possible photo filename extensions.
-    static const QStringList FILENAME_EXTENSIONS;
+    static const QStringList kFilenameExtensions;
 
     /**
      * @brief Constructor.
@@ -61,8 +61,8 @@ public:
 private:
     virtual bool isEqual(const PhotoResource& other) const;
 
-    const QString m_Name;
-    const QDateTime m_CreationDate;
+    const QString name_;
+    const QDateTime creationDate_;
 };
 
 } // namespace simphoniz

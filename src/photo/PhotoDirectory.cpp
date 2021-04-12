@@ -28,13 +28,13 @@
 
 namespace simphoniz {
 
-PhotoDirectory::PhotoDirectory(const QString& path, PhotoResource* resource) : m_Path{path}
+PhotoDirectory::PhotoDirectory(const QString& path, PhotoResource* resource) : path_{path}
 {
     addResource(resource);
 }
 
 PhotoDirectory::PhotoDirectory(const QString& path, const QVector<PhotoResource*>& resources)
-    : m_Path{path}
+    : path_{path}
 {
     for (auto it = std::cbegin(resources); it != std::cend(resources); ++it) {
         addResource(*it);
@@ -45,11 +45,11 @@ void PhotoDirectory::addResource(PhotoResource* resource)
 {
     Q_ASSERT(resource);
 
-    m_Resources.push_back(std::unique_ptr<PhotoResource>{resource});
+    resources_.push_back(std::unique_ptr<PhotoResource>{resource});
 }
 
-QString PhotoDirectory::getPath() const { return m_Path; }
-PhotoResourceVector const& PhotoDirectory::getResources() const { return m_Resources; }
+QString PhotoDirectory::getPath() const { return path_; }
+PhotoResourceVector const& PhotoDirectory::getResources() const { return resources_; }
 
 void PhotoDirectory::accept(PhotoResourceVisitor& visitor) const { visitor.visit(*this); }
 
@@ -57,14 +57,14 @@ bool PhotoDirectory::isEqual(const PhotoResource& other) const
 {
     const auto& obj = static_cast<const PhotoDirectory&>(other);
 
-    if (m_Path != obj.m_Path || m_Resources.size() != obj.m_Resources.size()) {
+    if (path_ != obj.path_ || resources_.size() != obj.resources_.size()) {
         return false;
     }
 
-    for (auto it = std::cbegin(m_Resources); it != std::cend(m_Resources); ++it) {
+    for (auto it = std::cbegin(resources_); it != std::cend(resources_); ++it) {
         // Check if at least one resource in the other directory is equal to the one at the current
         // iterator position
-        if (!std::any_of(std::cbegin(obj.m_Resources), std::cend(obj.m_Resources),
+        if (!std::any_of(std::cbegin(obj.resources_), std::cend(obj.resources_),
                          [&it](const auto& v) { return *v == **it; })) {
             return false;
         }

@@ -29,26 +29,26 @@ namespace simphoniz {
 
 namespace {
 
-const auto DIR_PATH_FORMAT = QStringLiteral("yyyy/MM MMM");
-const auto DEFAULT_DIRNAME = QStringLiteral("Unsorted");
-const auto FILENAME_PREFIX_FORMAT = QStringLiteral("yyyyMMdd-hhmmss");
-const auto FILENAME_EXTENSION = QStringLiteral(".jpeg");
+const auto kDirPathFormat = QStringLiteral("yyyy/MM MMM");
+const auto kDefaultDirname = QStringLiteral("Unsorted");
+const auto kFilenamePrefixFormat = QStringLiteral("yyyyMMdd-hhmmss");
+const auto kFilenameExtension = QStringLiteral(".jpeg");
 
 auto currentPhotoDirPath = QString{};
 
 QString computeNewFilePath(const PhotoFile& file, const QDir& destinationDir)
 {
     const auto date = file.getCreationDate();
-    auto fileName = date.isValid() ? date.toString(FILENAME_PREFIX_FORMAT) : file.getBaseName();
+    auto fileName = date.isValid() ? date.toString(kFilenamePrefixFormat) : file.getBaseName();
 
     // We verify if a file named as above is present in the destination folder.
     const auto list =
-        destinationDir.entryList(QStringList{fileName + '*' + FILENAME_EXTENSION}, QDir::Files);
+        destinationDir.entryList(QStringList{fileName + '*' + kFilenameExtension}, QDir::Files);
     if (!list.isEmpty()) {
         fileName += QString{" [%1]"}.arg(list.size());
     }
 
-    fileName += FILENAME_EXTENSION;
+    fileName += kFilenameExtension;
 
     return destinationDir.path() + '/' + fileName;
 }
@@ -57,7 +57,7 @@ QString computeNewFilePath(const PhotoFile& file, const QDir& destinationDir)
 
 GENEPY_DEFINE_CLASS_LOGGER(PhotoSorter::logger, "PhotoSorter")
 
-PhotoSorter::PhotoSorter(const QDir& destinationDir) : m_DestinationRootDir{destinationDir} {}
+PhotoSorter::PhotoSorter(const QDir& destinationDir) : destinationRootDir_{destinationDir} {}
 
 void PhotoSorter::visit(const PhotoDirectory& dir)
 {
@@ -78,15 +78,15 @@ void PhotoSorter::visit(const PhotoFile& file)
     const auto date = file.getCreationDate();
     const auto locale = QLocale{QLocale::English};
     const auto dirPath =
-        date.isValid() ? locale.toString(date, DIR_PATH_FORMAT).toUpper() : DEFAULT_DIRNAME;
+        date.isValid() ? locale.toString(date, kDirPathFormat).toUpper() : kDefaultDirname;
 
-    if (!m_DestinationRootDir.mkpath(dirPath)) {
+    if (!destinationRootDir_.mkpath(dirPath)) {
         GENEPY_LOG_ERROR(logger(), "Can't create destination directory for " << filePath)
         return;
     }
 
     const auto newFilePath =
-        computeNewFilePath(file, QDir{m_DestinationRootDir.path() + '/' + dirPath});
+        computeNewFilePath(file, QDir{destinationRootDir_.path() + '/' + dirPath});
 
     if (!QFile::rename(filePath, newFilePath)) {
         GENEPY_LOG_ERROR(logger(), "Can't rename " << filePath)

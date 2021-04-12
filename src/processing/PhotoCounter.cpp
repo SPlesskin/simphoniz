@@ -26,9 +26,9 @@
 
 namespace simphoniz {
 
-PhotoCounter::PhotoCounter() : m_Count{0} {}
+PhotoCounter::PhotoCounter() : count_{0} {}
 
-int PhotoCounter::getCount() const { return m_Count; }
+int PhotoCounter::getCount() const { return count_; }
 
 void PhotoCounter::visit(const PhotoDirectory& dir)
 {
@@ -39,7 +39,7 @@ void PhotoCounter::visit(const PhotoDirectory& dir)
 
 void PhotoCounter::visit(const PhotoFile& file)
 {
-    ++m_Count;
+    ++count_;
 
     Q_UNUSED(file)
 }

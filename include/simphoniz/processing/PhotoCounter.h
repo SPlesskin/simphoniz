@@ -48,7 +48,7 @@ public:
     virtual void visit(const PhotoFile& file) override;
 
 private:
-    int m_Count;
+    int count_;
 };
 
 } // namespace simphoniz

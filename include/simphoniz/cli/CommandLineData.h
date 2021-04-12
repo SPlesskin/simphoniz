@@ -30,7 +30,7 @@ namespace simphoniz {
 
 /**
  * @brief Holds the data present in the command line.
- * @ingroup console
+ * @ingroup cli
  */
 struct CommandLineData {
     QDir sourceDir;      ///< The source directory.

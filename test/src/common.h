@@ -21,7 +21,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QMetaType>
 
-extern const QString TEST_IMAGE_DIR_PATH;
+extern const QString kTestImageDirPath;
 
 Q_DECLARE_METATYPE(QDir)
 

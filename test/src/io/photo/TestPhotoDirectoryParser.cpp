@@ -21,15 +21,15 @@
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/photo/PhotoFile.h>
 
-#include "../../../common.h"
+#include "../../common.h"
 
 using namespace simphoniz;
 
 void TestPhotoDirectoryParser::initTestCase()
 {
-    QVERIFY(m_WorkingDir.isValid());
+    QVERIFY(workingDir_.isValid());
 
-    qDebug() << "Working directory:" << m_WorkingDir.path();
+    qDebug() << "Working directory:" << workingDir_.path();
 }
 
 void TestPhotoDirectoryParser::testExecute_data()
@@ -38,10 +38,10 @@ void TestPhotoDirectoryParser::testExecute_data()
     QTest::addColumn<QSharedPointer<PhotoDirectory>>("expectedPhotoDir");
 
     QTest::newRow("non-existent directory")
-        << QDir{m_WorkingDir.path() + QStringLiteral("/a")} << QSharedPointer<PhotoDirectory>{};
+        << QDir{workingDir_.path() + QStringLiteral("/a")} << QSharedPointer<PhotoDirectory>{};
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/a")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/a")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
@@ -49,12 +49,12 @@ void TestPhotoDirectoryParser::testExecute_data()
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/b")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/b")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("emoticon.png");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + fileName));
 
@@ -62,12 +62,12 @@ void TestPhotoDirectoryParser::testExecute_data()
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/c")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/c")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("eagle.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + fileName));
 
@@ -75,12 +75,12 @@ void TestPhotoDirectoryParser::testExecute_data()
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/d")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/d")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("tractor.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + fileName));
 
@@ -91,12 +91,12 @@ void TestPhotoDirectoryParser::testExecute_data()
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/e")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/e")};
 
         QVERIFY(dir.mkpath(QStringLiteral(".")));
 
         const auto fileName = QStringLiteral("antelope-canyon.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + fileName));
 
@@ -107,14 +107,14 @@ void TestPhotoDirectoryParser::testExecute_data()
     }
 
     {
-        const auto dir = QDir{m_WorkingDir.path() + QStringLiteral("/f")};
+        const auto dir = QDir{workingDir_.path() + QStringLiteral("/f")};
 
         const auto subdirName = QStringLiteral("g");
 
         QVERIFY(dir.mkpath(subdirName));
 
         const auto fileName = QStringLiteral("antelope-canyon.jpg");
-        QFile file{TEST_IMAGE_DIR_PATH + '/' + fileName};
+        QFile file{kTestImageDirPath + '/' + fileName};
 
         QVERIFY(file.copy(dir.path() + '/' + subdirName + '/' + fileName));
 

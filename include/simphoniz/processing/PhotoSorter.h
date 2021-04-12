@@ -56,7 +56,7 @@ signals:
 private:
     GENEPY_DECLARE_CLASS_LOGGER(logger)
 
-    const QDir m_DestinationRootDir;
+    const QDir destinationRootDir_;
 };
 
 } // namespace simphoniz

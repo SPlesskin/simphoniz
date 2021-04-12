@@ -17,4 +17,4 @@
 
 #include "common.h"
 
-const QString TEST_IMAGE_DIR_PATH = QStringLiteral(TEST_RESOURCE_DIR "/images");
+const QString kTestImageDirPath = QStringLiteral(TEST_RESOURCE_DIR "/images");

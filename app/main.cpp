@@ -28,8 +28,8 @@
 #include <genepy/log/Logger.h>
 
 #include <simphoniz/Application.h>
-#include <simphoniz/io/console/CommandLineData.h>
-#include <simphoniz/io/console/CommandLineParser.h>
+#include <simphoniz/cli/CommandLineData.h>
+#include <simphoniz/cli/CommandLineParser.h>
 #include <simphoniz/io/photo/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoCounter.h>
@@ -39,7 +39,7 @@ using namespace simphoniz;
 
 namespace {
 
-const auto COPYRIGHT_NOTICE = "Simphoniz  Copyright (C) 2020, 2021  Erwan Grâce\n"
+const auto kCopyrightNotice = "Simphoniz  Copyright (C) 2020, 2021  Erwan Grâce\n"
                               "This is free software; see the source code for copying conditions.\n"
                               "There is ABSOLUTELY NO WARRANTY; not even for MERCHANTABILITY or\n"
                               "FITNESS FOR A PARTICULAR PURPOSE.\n\n";
@@ -59,22 +59,22 @@ int main(int argc, char** argv)
     auto data = CommandLineData{};
     auto errorMessage = QString{};
     switch (parser.doParsing(data, errorMessage)) {
-        case CommandLineParsingResult::OK:
+        case CommandLineParsingResult::kOk:
             break;
-        case CommandLineParsingResult::KO:
+        case CommandLineParsingResult::kKo:
             fputs(qPrintable(errorMessage), stderr);
             fputs("\n\n", stderr);
             fputs(qPrintable(parser.helpText()), stderr);
             return 1;
-        case CommandLineParsingResult::VERSION_REQUESTED:
+        case CommandLineParsingResult::kVersionRequested:
             printf("%s %s\n", qPrintable(Application::applicationName()),
                    qPrintable(Application::applicationVersion()));
             return 0;
-        case CommandLineParsingResult::HELP_REQUESTED:
+        case CommandLineParsingResult::kHelpRequested:
             parser.showHelp();
     }
 
-    std::cout << COPYRIGHT_NOTICE;
+    std::cout << kCopyrightNotice;
 
     /********************************************
      * Initialize the logging system

@@ -15,24 +15,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTPHOTOSORTER_H
-#define TESTPHOTOSORTER_H
+/**
+ * @file CommandLineParsingResult.h
+ * @author Erwan
+ * @date 01/11/2019
+ */
 
-#include <QtTest/QtTest>
+#ifndef SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
+#define SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
 
-class TestPhotoSorter : public QObject {
+namespace simphoniz {
 
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void cleanup();
-    void test_data();
-    void test();
-
-private:
-    QTemporaryDir m_WorkingDir;
-    QDir m_DestinationDir;
+/**
+ * @brief Defines the possible outcomes of the command-line parsing.
+ * @ingroup cli
+ */
+enum class CommandLineParsingResult {
+    kOk,              ///< The parsing succeeded.
+    kKo,              ///< The parsing failed.
+    kHelpRequested,   ///< The help option was present.
+    kVersionRequested ///< The version option was present.
 };
 
-#endif // TESTPHOTOSORTER_H
+} // namespace simphoniz
+
+#endif // SIMPHONIZ_COMMANDLINEPARSINGRESULT_H

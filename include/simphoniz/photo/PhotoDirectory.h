@@ -74,8 +74,8 @@ public:
 private:
     virtual bool isEqual(const PhotoResource& other) const;
 
-    const QString m_Path;
-    PhotoResourceVector m_Resources;
+    const QString path_;
+    PhotoResourceVector resources_;
 };
 
 } // namespace simphoniz
