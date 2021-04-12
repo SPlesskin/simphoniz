@@ -1,5 +1,5 @@
 /* Simphoniz - A Simple Photo Organizer
- * Copyright (C) 2020  Erwan Grâce <erwan.grace@outlook.fr>
+ * Copyright (C) 2020, 2021  Erwan Grâce <erwan.grace@outlook.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ using namespace simphoniz;
 
 namespace {
 
-const auto COPYRIGHT_NOTICE = "Simphoniz  Copyright (C) 2020  Erwan Grâce\n"
+const auto COPYRIGHT_NOTICE = "Simphoniz  Copyright (C) 2020, 2021  Erwan Grâce\n"
                               "This is free software; see the source code for copying conditions.\n"
                               "There is ABSOLUTELY NO WARRANTY; not even for MERCHANTABILITY or\n"
                               "FITNESS FOR A PARTICULAR PURPOSE.\n\n";

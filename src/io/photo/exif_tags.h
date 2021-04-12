@@ -1,5 +1,5 @@
 /* Simphoniz - A Simple Photo Organizer
- * Copyright (C) 2020  Erwan Grâce <erwan.grace@outlook.fr>
+ * Copyright (C) 2020, 2021  Erwan Grâce <erwan.grace@outlook.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
