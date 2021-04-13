@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   genepy-version:
     type: string
-    default: 0.3.0
+    default: 0.4.0
 
 orbs:
   windows: circleci/windows@2.4.0
