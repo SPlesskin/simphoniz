@@ -1,0 +1,3 @@
+[submodule "genepy"]
+	path = genepy
+	url = git@github.com:SPlesskin/genepy.git
