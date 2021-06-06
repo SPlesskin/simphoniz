@@ -9,8 +9,9 @@ structure.
 ## Installation
 
 Simphoniz is a [Qt 5](https://www.qt.io/) application which has been developped and mainly tested on
-Linux Debian Stretch (Debian 9). [CMake](https://cmake.org/) and a C++14 compiler are required to
-build the project.
+Linux Debian Stretch (Debian 9). [CMake](https://cmake.org/) 3.7 or higher and a C++14 compiler are
+required to build the project. Moreover, it depends on the [Genepy](https://github.com/SPlesskin/genepy)
+library which must be installed beforehand.
 
 ```bash
 cd external
