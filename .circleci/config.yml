@@ -1,10 +1,5 @@
 version: 2.1
 
-parameters:
-  genepy-version:
-    type: string
-    default: 0.4.0
-
 orbs:
   windows: circleci/windows@2.4.0
 
@@ -41,20 +36,19 @@ jobs:
           name: Install build tools
           command: apt-get update && apt-get install -y git cmake g++ qtdeclarative5-dev
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
       - run:
-          name: Install and configure JFrog CLI
+          name: Compile and install Genepy
           command: |
-            apt-get update && apt-get install -y curl
-            curl -fL https://getcli.jfrog.io | sh
-            ./jfrog rt c --url $JFROG_ARTIFACTORY_URL --user $JFROG_USERNAME --password \
-            $JFROG_PASSWORD
-      - run:
-          name: Download (from JFrog) and install Genepy
-          environment:
-            GENEPY_PACKAGE_NAME: genepy_<< pipeline.parameters.genepy-version >>-1_amd64
-          command: |
-            ./jfrog rt dl genepy-linux-release/$GENEPY_PACKAGE_NAME.deb
-            apt-get update && apt-get install -y ./*.deb
+            cd genepy/external
+            mkdir build && cd build
+            cmake -G "Unix Makefiles" -D GENEPY_EXTERNAL_BUILD_TYPE=Release ..
+            make
+            cd ../..
+            mkdir build && cd build
+            cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+            make install
       - run:
           name: Compile external dependencies
           command: |
@@ -103,9 +97,6 @@ jobs:
                   cd build
                   make package
                   mkdir installer && mv *.deb installer
-            - run:
-                name: Upload installer to JFrog
-                command: ./jfrog rt u "build/installer/*.deb" simphoniz-linux-release
             - store_artifacts:
                 path: build/installer
 
@@ -114,26 +105,26 @@ jobs:
       name: windows/default
     steps:
       - install-qt
-      - run:
-          name: Install and configure JFrog CLI
-          command: |
-            choco install jfrog-cli
-            jfrog rt c --url $Env:JFROG_ARTIFACTORY_URL --user $Env:JFROG_USERNAME --password `
-            $Env:JFROG_PASSWORD
-      - run:
-          name: Download (from JFrog) and install Genepy
-          environment:
-            GENEPY_PACKAGE_NAME: genepy-<< pipeline.parameters.genepy-version >>-msvc-x64
-          command: |
-            jfrog rt dl genepy-windows-release/$Env:GENEPY_PACKAGE_NAME.zip
-            Expand-Archive *.zip -DestinationPath $Env:ProgramFiles
-            Rename-Item -Path $Env:ProgramFiles\$Env:GENEPY_PACKAGE_NAME -NewName Genepy
-            Remove-Item *.zip
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run:
+          name: Compile and install Genepy
+          command: |
+            Install-module posh-vs -Force
+            Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
+            $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+            cd genepy\external
+            mkdir build; cd build
+            cmake -G "NMake Makefiles" -D GENEPY_EXTERNAL_BUILD_TYPE=Release ..
+            nmake
+            cd ..\..
+            mkdir build; cd build
+            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+            nmake install
       - run:
           name: Compile external dependencies
           command: |
-            Install-module posh-vs -Force
             Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
             $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
             cd external
@@ -186,9 +177,6 @@ jobs:
                   cd build
                   nmake package
                   mkdir package; mv *.zip package
-            - run:
-                name: Upload package to JFrog
-                command: jfrog rt u "build/package/*.zip" simphoniz-windows-release
             - store_artifacts:
                 path: build/package
 
@@ -198,22 +186,21 @@ jobs:
     steps:
       - install-qt:
           components: qt.qt5.5152.win64_mingw81 qt.tools.win64_mingw810 qt.tools.cmake.win64
-      - run:
-          name: Install and configure JFrog CLI
-          command: |
-            choco install jfrog-cli
-            jfrog rt c --url $Env:JFROG_ARTIFACTORY_URL --user $Env:JFROG_USERNAME --password `
-            $Env:JFROG_PASSWORD
-      - run:
-          name: Download (from JFrog) and install Genepy
-          environment:
-            GENEPY_PACKAGE_NAME: genepy-<< pipeline.parameters.genepy-version >>-mingw-x64
-          command: |
-            jfrog rt dl genepy-windows-release/$Env:GENEPY_PACKAGE_NAME.zip
-            Expand-Archive *.zip -DestinationPath $Env:ProgramFiles
-            Rename-Item -Path $Env:ProgramFiles\$Env:GENEPY_PACKAGE_NAME -NewName Genepy
-            Remove-Item *.zip
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run:
+          name: Compile and install Genepy
+          command: |
+            $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
+            cd genepy\external
+            mkdir build; cd build
+            cmake -G "MinGW Makefiles" -D GENEPY_EXTERNAL_BUILD_TYPE=Release ..
+            mingw32-make
+            cd ..\..
+            mkdir build; cd build
+            cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+            mingw32-make
       - run:
           name: Compile external dependencies
           command: |
@@ -264,22 +251,14 @@ jobs:
                   cd build
                   mingw32-make package
                   mkdir package; mv *.zip package
-            - run:
-                name: Upload package to JFrog
-                command: jfrog rt u "build/package/*.zip" simphoniz-windows-release
             - store_artifacts:
                 path: build/package
 
 workflows:
   simphoniz:
     jobs:
-      - linux-build:
-          context: jfrog
+      - linux-build
       - windows-msvc-build:
-          context:
-            - qt-project
-            - jfrog
+          context: qt-project
       - windows-mingw-build:
-          context:
-            - qt-project
-            - jfrog
+          context: qt-project
