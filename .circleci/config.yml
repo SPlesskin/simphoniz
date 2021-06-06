@@ -200,7 +200,7 @@ jobs:
             cd ..\..
             mkdir build; cd build
             cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
-            mingw32-make
+            mingw32-make install
       - run:
           name: Compile external dependencies
           command: |
