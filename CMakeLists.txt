@@ -22,7 +22,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.15)
     cmake_policy(SET CMP0092 NEW) # Silence MSVC warning D9025
 endif()
 
-project(Simphoniz VERSION 0.4.0 LANGUAGES CXX)
+project(Simphoniz VERSION 0.5.0 LANGUAGES CXX)
 
 # Set a default build type if none was specified
 include(cmake/SimphonizBuildType.cmake)
