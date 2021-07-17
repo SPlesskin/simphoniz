@@ -36,7 +36,7 @@ target_include_directories(${SIMPHONIZ_LIBRARY}
                            SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIR})
 
 find_package(Qt5 REQUIRED COMPONENTS Core)
-find_package(Genepy 0.5.0 REQUIRED CONFIG)
+find_package(Genepy 0.6.0 REQUIRED CONFIG)
 find_package(exiv2lib REQUIRED CONFIG NAMES exiv2)
 
 if(UNIX)
