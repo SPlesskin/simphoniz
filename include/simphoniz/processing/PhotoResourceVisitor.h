@@ -39,10 +39,9 @@ class PhotoFile;
 
 /**
  * @brief Base class for the processing classes.
+ * @ingroup processing
  *
  * All of these classes implement the visitor pattern.
- *
- * @ingroup processing
  */
 class PhotoResourceVisitor : public QObject {
 public:

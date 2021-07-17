@@ -17,11 +17,11 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "TestPhotoCounter.h"
-
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/photo/PhotoFile.h>
 #include <simphoniz/processing/PhotoCounter.h>
+
+#include "TestPhotoCounter.h"
 
 using namespace simphoniz;
 

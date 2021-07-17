@@ -17,10 +17,10 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "TestPhotoDirectory.h"
-
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/photo/PhotoFile.h>
+
+#include "TestPhotoDirectory.h"
 
 using namespace simphoniz;
 

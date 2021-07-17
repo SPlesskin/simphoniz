@@ -17,9 +17,9 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "TestPhotoFile.h"
-
 #include <simphoniz/photo/PhotoFile.h>
+
+#include "TestPhotoFile.h"
 
 using namespace simphoniz;
 

@@ -61,7 +61,7 @@ public:
     virtual void accept(PhotoResourceVisitor& visitor) const override;
 
 private:
-    virtual bool isEqual(const PhotoResource& other) const;
+    virtual bool isEqual(const PhotoResource& other) const override;
 
     const QString name_;
     const QDateTime creationDate_;

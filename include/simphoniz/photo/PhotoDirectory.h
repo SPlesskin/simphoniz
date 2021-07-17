@@ -51,10 +51,10 @@ public:
      * @param resource a photo resource located in this directory
      * @note This directory takes ownership of the given resource.
      */
-    explicit PhotoDirectory(const QString& path, PhotoResource* resource);
+    PhotoDirectory(const QString& path, PhotoResource* resource);
 
     /// Constructor which accepts multiple photo resources.
-    explicit PhotoDirectory(const QString& path, const QVector<PhotoResource*>& resources);
+    PhotoDirectory(const QString& path, const QVector<PhotoResource*>& resources);
 
     /**
      * @brief Adds a photo resource to this directory.
@@ -74,7 +74,7 @@ public:
     virtual void accept(PhotoResourceVisitor& visitor) const override;
 
 private:
-    virtual bool isEqual(const PhotoResource& other) const;
+    virtual bool isEqual(const PhotoResource& other) const override;
 
     const QString path_;
     PhotoResourceVector resources_;

@@ -27,8 +27,6 @@
 #include <simphoniz/photo/PhotoFile.h>
 #include <simphoniz/processing/PhotoSorter.h>
 
-namespace simphoniz {
-
 namespace {
 
 const auto kDirPathFormat = QStringLiteral("yyyy/MM MMM");
@@ -38,7 +36,7 @@ const auto kFilenameExtension = QStringLiteral(".jpeg");
 
 auto currentPhotoDirPath = QString{};
 
-QString computeNewFilePath(const PhotoFile& file, const QDir& destinationDir)
+QString computeNewFilePath(const simphoniz::PhotoFile& file, const QDir& destinationDir)
 {
     const auto date = file.getCreationDate();
     auto fileName = date.isValid() ? date.toString(kFilenamePrefixFormat) : file.getBaseName();
@@ -56,6 +54,8 @@ QString computeNewFilePath(const PhotoFile& file, const QDir& destinationDir)
 }
 
 } // namespace
+
+namespace simphoniz {
 
 GENEPY_DEFINE_CLASS_LOGGER(PhotoSorter::logger, "PhotoSorter")
 

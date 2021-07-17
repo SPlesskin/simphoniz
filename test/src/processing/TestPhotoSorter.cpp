@@ -17,13 +17,12 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "TestPhotoSorter.h"
-
 #include <simphoniz/io/photo/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoSorter.h>
 
 #include "../common.h"
+#include "TestPhotoSorter.h"
 
 using namespace simphoniz;
 

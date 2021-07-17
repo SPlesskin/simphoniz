@@ -29,8 +29,6 @@
 #include <simphoniz/cli/CommandLineData.h>
 #include <simphoniz/cli/CommandLineParser.h>
 
-namespace simphoniz {
-
 namespace {
 
 const auto kSourceArgumentName = QStringLiteral("source");
@@ -43,11 +41,13 @@ const auto kNMandatoryArguments = 2;
 
 QString getApplicationDescription()
 {
-    return Application::applicationName() +
+    return simphoniz::Application::applicationName() +
            QStringLiteral(" allows sorting photos according to their creation time.");
 }
 
 } // namespace
+
+namespace simphoniz {
 
 CommandLineParser::CommandLineParser()
     : helpOption_{addHelpOption()}, versionOption_{addVersionOption()}

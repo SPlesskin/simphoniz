@@ -37,8 +37,6 @@
 #include <simphoniz/processing/PhotoCounter.h>
 #include <simphoniz/processing/PhotoSorter.h>
 
-using namespace simphoniz;
-
 namespace {
 
 const auto kCopyrightNotice = "Simphoniz  Copyright (C) 2020, 2021  Erwan Grâce\n"
@@ -47,6 +45,8 @@ const auto kCopyrightNotice = "Simphoniz  Copyright (C) 2020, 2021  Erwan Grâce
                               "FITNESS FOR A PARTICULAR PURPOSE.\n\n";
 
 } // namespace
+
+using namespace simphoniz;
 
 int main(int argc, char** argv)
 {

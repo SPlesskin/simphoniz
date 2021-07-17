@@ -33,14 +33,12 @@
 
 #include "exif_tags.h"
 
-namespace simphoniz {
-
 namespace {
 
 bool isFileNameExtensionValid(const QString& extension)
 {
-    for (auto it = std::cbegin(PhotoFile::kFilenameExtensions);
-         it != std::cend(PhotoFile::kFilenameExtensions); ++it) {
+    for (auto it = std::cbegin(simphoniz::PhotoFile::kFilenameExtensions);
+         it != std::cend(simphoniz::PhotoFile::kFilenameExtensions); ++it) {
         if (QString::compare(extension, *it, Qt::CaseInsensitive) == 0) {
             return true;
         }
@@ -51,17 +49,19 @@ bool isFileNameExtensionValid(const QString& extension)
 
 QDateTime findPhotoCreationDate(const Exiv2::ExifData& data)
 {
-    const auto key = Exiv2::ExifKey{exif::key::kDateTimeOriginal};
+    const auto key = Exiv2::ExifKey{simphoniz::exif::key::kDateTimeOriginal};
     const auto it = data.findKey(key);
     if (it == data.end()) {
         return QDateTime{}; // Return an invalid date
     }
 
     return QDateTime::fromString(QString::fromStdString(it->toString()),
-                                 exif::value::kDateTimeOriginalFormat);
+                                 simphoniz::exif::value::kDateTimeOriginalFormat);
 }
 
 } // namespace
+
+namespace simphoniz {
 
 GENEPY_DEFINE_CLASS_LOGGER(PhotoDirectoryParser::logger, "PhotoDirectoryParser")
 
@@ -88,9 +88,9 @@ PhotoDirectory* PhotoDirectoryParser::parseDir(const QDir& dir) const
     while (it.hasNext()) {
         const auto path = it.next();
 
-        const auto resource = it.fileInfo().isDir()
-                                  ? static_cast<PhotoResource*>(parseDir(QDir{path}))
-                                  : static_cast<PhotoResource*>(parseFile(it.fileInfo()));
+        auto* resource = it.fileInfo().isDir()
+                             ? static_cast<PhotoResource*>(parseDir(QDir{path}))
+                             : static_cast<PhotoResource*>(parseFile(it.fileInfo()));
 
         if (resource) {
             if (!result) {
