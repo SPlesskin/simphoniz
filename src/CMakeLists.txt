@@ -1,18 +1,20 @@
 # Simphoniz - A Simple Photo Organizer
 # Copyright (C) 2020, 2021  Erwan Grâce <erwan.grace@outlook.fr>
 #
-# This program is free software: you can redistribute it and/or modify
+# This file is part of Simphoniz.
+#
+# Simphoniz is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
+# Simphoniz is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
 
 # List the source files
 # =====================
@@ -21,7 +23,8 @@ set(SIMPHONIZ_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 configure_file(${SIMPHONIZ_RESOURCE_DIR}/cpp/Application.cpp.in "${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp" @ONLY)
 
 file(GLOB_RECURSE SIMPHONIZ_LIBRARY_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-file(GLOB_RECURSE SIMPHONIZ_LIBRARY_HEADERS ${SIMPHONIZ_INCLUDE_DIR}/*.h)
+file(GLOB_RECURSE SIMPHONIZ_LIBRARY_HEADERS ${SIMPHONIZ_INCLUDE_DIR}/*.h
+                                            "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
 # Build the library
 # =================
