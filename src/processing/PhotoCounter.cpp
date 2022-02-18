@@ -1,5 +1,5 @@
 /* Simphoniz - A Simple Photo Organizer
- * Copyright (C) 2020, 2021  Erwan Grâce <erwan.grace@outlook.fr>
+ * Copyright (C) 2020-2022  Erwan Grâce <erwan.grace@outlook.fr>
  *
  * This file is part of Simphoniz.
  *

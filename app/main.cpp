@@ -1,5 +1,5 @@
 /* Simphoniz - A Simple Photo Organizer
- * Copyright (C) 2020, 2021  Erwan Grâce <erwan.grace@outlook.fr>
+ * Copyright (C) 2020-2022  Erwan Grâce <erwan.grace@outlook.fr>
  *
  * This file is part of Simphoniz.
  *
@@ -38,7 +38,7 @@
 
 namespace {
 
-const auto kCopyrightNotice = "Simphoniz  Copyright (C) 2020, 2021  Erwan Grâce\n"
+const auto kCopyrightNotice = "Simphoniz  Copyright (C) 2020-2022  Erwan Grâce\n"
                               "This is free software; see the source code for copying conditions.\n"
                               "There is ABSOLUTELY NO WARRANTY; not even for MERCHANTABILITY or\n"
                               "FITNESS FOR A PARTICULAR PURPOSE.\n\n";
