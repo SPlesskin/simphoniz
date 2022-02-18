@@ -24,6 +24,7 @@
  */
 
 #include <simphoniz/photo/PhotoFile.h>
+
 #include <simphoniz/processing/PhotoResourceVisitor.h>
 
 namespace simphoniz {
@@ -36,7 +37,9 @@ PhotoFile::PhotoFile(const QString& name, const QDateTime& creationDate)
 }
 
 QString PhotoFile::getName() const { return name_; }
+
 QString PhotoFile::getBaseName() const { return name_.section('.', 0, 0); }
+
 QDateTime PhotoFile::getCreationDate() const { return creationDate_; }
 
 void PhotoFile::accept(PhotoResourceVisitor& visitor) const { visitor.visit(*this); }

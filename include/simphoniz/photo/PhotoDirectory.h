@@ -63,13 +63,11 @@ public:
      */
     void addResource(PhotoResource* resource);
 
-    /**
-     * @name Getters/Setters
-     * @{
-     */
+    /// Returns the path to this directory.
     QString getPath() const;
+
+    /// Returns the photo resources contained in this directory.
     PhotoResourceVector const& getResources() const;
-    /** @} */
 
     virtual void accept(PhotoResourceVisitor& visitor) const override;
 

@@ -17,12 +17,13 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <simphoniz/io/photo/PhotoDirectoryParser.h>
+#include "TestPhotoDirectoryParser.h"
+
+#include <simphoniz/io/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/photo/PhotoFile.h>
 
-#include "../../common.h"
-#include "TestPhotoDirectoryParser.h"
+#include "../common.h"
 
 using namespace simphoniz;
 
@@ -38,8 +39,8 @@ void TestPhotoDirectoryParser::testExecute_data()
     QTest::addColumn<QDir>("dir");
     QTest::addColumn<QSharedPointer<PhotoDirectory>>("expectedPhotoDir");
 
-    QTest::newRow("non-existent directory")
-        << QDir{workingDir_.path() + QStringLiteral("/a")} << QSharedPointer<PhotoDirectory>{};
+    QTest::newRow("non-existent directory") << QDir{workingDir_.path() + QStringLiteral("/a")}
+                                            << QSharedPointer<PhotoDirectory>{};
 
     {
         const auto dir = QDir{workingDir_.path() + QStringLiteral("/a")};
@@ -144,4 +145,4 @@ void TestPhotoDirectoryParser::testExecute()
     }
 }
 
-QTEST_MAIN(TestPhotoDirectoryParser)
+QTEST_APPLESS_MAIN(TestPhotoDirectoryParser)

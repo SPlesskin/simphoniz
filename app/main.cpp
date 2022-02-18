@@ -31,7 +31,7 @@
 #include <genepy/log/Logger.h>
 
 #include <simphoniz/ApplicationInformation.h>
-#include <simphoniz/io/photo/PhotoDirectoryParser.h>
+#include <simphoniz/io/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoCounter.h>
 #include <simphoniz/processing/PhotoSorter.h>

@@ -17,9 +17,9 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <simphoniz/photo/PhotoFile.h>
-
 #include "TestPhotoFile.h"
+
+#include <simphoniz/photo/PhotoFile.h>
 
 using namespace simphoniz;
 
@@ -63,4 +63,4 @@ void TestPhotoFile::testEqualityOperator()
     }
 }
 
-QTEST_MAIN(TestPhotoFile)
+QTEST_APPLESS_MAIN(TestPhotoFile)

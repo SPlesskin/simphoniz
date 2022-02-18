@@ -23,8 +23,9 @@
  * @date 01/01/2020
  */
 
-#include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoCounter.h>
+
+#include <simphoniz/photo/PhotoDirectory.h>
 
 namespace simphoniz {
 

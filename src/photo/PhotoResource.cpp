@@ -23,9 +23,9 @@
  * @date 23/12/2019
  */
 
-#include <typeinfo>
-
 #include <simphoniz/photo/PhotoResource.h>
+
+#include <typeinfo>
 
 namespace simphoniz {
 

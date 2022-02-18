@@ -17,12 +17,13 @@
  * along with Simphoniz.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <simphoniz/io/photo/PhotoDirectoryParser.h>
+#include "TestPhotoSorter.h"
+
+#include <simphoniz/io/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoSorter.h>
 
 #include "../common.h"
-#include "TestPhotoSorter.h"
 
 using namespace simphoniz;
 
@@ -126,4 +127,4 @@ void TestPhotoSorter::test()
     QVERIFY(isDirectoryEmpty(photoDir->getPath()));
 }
 
-QTEST_MAIN(TestPhotoSorter)
+QTEST_APPLESS_MAIN(TestPhotoSorter)

@@ -43,13 +43,8 @@ class PhotoFile;
  */
 
 /**
- * @defgroup photo-io Photo
- * @ingroup io
- */
-
-/**
  * @brief Parses a photo directory.
- * @ingroup photo-io
+ * @ingroup io
  */
 class PhotoDirectoryParser {
 public:
@@ -59,8 +54,8 @@ public:
     /**
      * @brief Executes the parser on the given directory.
      * @param dir the directory to parse
-     * @return a pointer to a `PhotoDirectory` object which can be null if the directory contains no
-     * photo
+     * @return a pointer to a simphoniz::PhotoDirectory object which can be null if the directory
+     * contains no photo
      */
     std::unique_ptr<PhotoDirectory> execute(const QDir& dir) const;
 

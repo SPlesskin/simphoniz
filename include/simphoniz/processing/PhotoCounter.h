@@ -39,12 +39,8 @@ public:
     /// Constructor.
     PhotoCounter();
 
-    /**
-     * @name Getters/Setters
-     * @{
-     */
+    /// Returns the number of counted files.
     int getCount() const;
-    /** @} */
 
     virtual void visit(const PhotoDirectory& dir) override;
     virtual void visit(const PhotoFile& file) override;

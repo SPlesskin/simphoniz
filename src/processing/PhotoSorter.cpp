@@ -23,9 +23,10 @@
  * @date 01/01/2020
  */
 
+#include <simphoniz/processing/PhotoSorter.h>
+
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/photo/PhotoFile.h>
-#include <simphoniz/processing/PhotoSorter.h>
 
 namespace {
 
@@ -83,7 +84,7 @@ void PhotoSorter::visit(const PhotoFile& file)
         date.isValid() ? locale.toString(date, kDirPathFormat).toUpper() : kDefaultDirname;
 
     if (!destinationRootDir_.mkpath(dirPath)) {
-        GENEPY_LOG_ERROR(logger(), "Can't create destination directory for " << filePath)
+        GENEPY_LOG_ERROR(logger(), "Can't create destination directory for file " << filePath)
         return;
     }
 
@@ -91,7 +92,7 @@ void PhotoSorter::visit(const PhotoFile& file)
         computeNewFilePath(file, QDir{destinationRootDir_.path() + '/' + dirPath});
 
     if (!QFile::rename(filePath, newFilePath)) {
-        GENEPY_LOG_ERROR(logger(), "Can't rename " << filePath)
+        GENEPY_LOG_ERROR(logger(), "Can't rename file " << filePath)
     }
 
     emit photoSorted();

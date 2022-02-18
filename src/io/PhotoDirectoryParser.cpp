@@ -23,11 +23,12 @@
  * @date 23/12/2019
  */
 
+#include <simphoniz/io/PhotoDirectoryParser.h>
+
 #include <QtCore/QDirIterator>
 
 #include <exiv2/exiv2.hpp>
 
-#include <simphoniz/io/photo/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/photo/PhotoFile.h>
 
@@ -119,14 +120,15 @@ PhotoFile* PhotoDirectoryParser::parseFile(const QFileInfo& info) const
 
         const auto& exifData = image->exifData();
         if (exifData.empty()) {
-            GENEPY_LOG_WARN(logger(), "No EXIF data found in " << info.absoluteFilePath())
+            GENEPY_LOG_WARN(logger(), "No EXIF data found in file " << info.absoluteFilePath())
             return nullptr;
         }
 
         // Retrieve the creation date of the photo
         const auto creationDate = findPhotoCreationDate(exifData);
         if (!creationDate.isValid()) {
-            GENEPY_LOG_WARN(logger(), "Can't get creation date of " << info.absoluteFilePath());
+            GENEPY_LOG_WARN(logger(), "Can't get creation date of file "
+                                          << info.absoluteFilePath());
         }
         else {
             GENEPY_LOG_DEBUG(logger(), "Creation date: " << creationDate.toString(
@@ -136,8 +138,8 @@ PhotoFile* PhotoDirectoryParser::parseFile(const QFileInfo& info) const
         return new PhotoFile{info.fileName(), creationDate};
     }
     catch (const Exiv2::Error& e) {
-        GENEPY_LOG_ERROR(logger(), "Error when reading metadata of " << info.absoluteFilePath()
-                                                                     << ": " << e.what())
+        GENEPY_LOG_ERROR(logger(), "Error when reading metadata of file " << info.absoluteFilePath()
+                                                                          << ": " << e.what())
         return nullptr;
     }
 }

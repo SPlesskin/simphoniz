@@ -23,9 +23,10 @@
  * @date 23/12/2019
  */
 
+#include <simphoniz/photo/PhotoDirectory.h>
+
 #include <QtCore/QVector>
 
-#include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoResourceVisitor.h>
 
 namespace simphoniz {
@@ -51,6 +52,7 @@ void PhotoDirectory::addResource(PhotoResource* resource)
 }
 
 QString PhotoDirectory::getPath() const { return path_; }
+
 PhotoResourceVector const& PhotoDirectory::getResources() const { return resources_; }
 
 void PhotoDirectory::accept(PhotoResourceVisitor& visitor) const { visitor.visit(*this); }

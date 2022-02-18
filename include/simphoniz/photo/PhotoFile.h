@@ -49,14 +49,14 @@ public:
      */
     PhotoFile(const QString& name, const QDateTime& creationDate = QDateTime{});
 
-    /**
-     * @name Getters/Setters
-     * @{
-     */
+    /// Returns the name of this file.
     QString getName() const;
+
+    /// Returns the base name of this file.
     QString getBaseName() const;
+
+    /// Returns the creation date of this file.
     QDateTime getCreationDate() const;
-    /** @} */
 
     virtual void accept(PhotoResourceVisitor& visitor) const override;
 
