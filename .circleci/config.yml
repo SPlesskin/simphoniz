@@ -43,18 +43,18 @@ jobs:
           command: |
             cd genepy/external
             mkdir build && cd build
-            cmake -G "Unix Makefiles" -D GENEPY_EXTERNAL_BUILD_TYPE=Release ..
+            cmake -G"Unix Makefiles" -DGENEPY_EXTERNAL_BUILD_TYPE=Release ..
             make
             cd ../..
             mkdir build && cd build
-            cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+            cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
             make install
       - run:
           name: Compile external dependencies
           command: |
             cd external
             mkdir build && cd build
-            cmake -G "Unix Makefiles" -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+            cmake -G"Unix Makefiles" -DSIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
             make
       - unless:
           condition:
@@ -64,7 +64,7 @@ jobs:
                 name: Compile Simphoniz
                 command: |
                   mkdir build && cd build
-                  cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release ..
+                  cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
                   make
             - run:
                 name: Execute tests
@@ -88,7 +88,7 @@ jobs:
                 name: Compile Simphoniz
                 command: |
                   mkdir build && cd build
-                  cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+                  cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
                   make
             - run:
                 name: Generate binary installer
@@ -116,11 +116,11 @@ jobs:
             $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
             cd genepy\external
             mkdir build; cd build
-            cmake -G "NMake Makefiles" -D GENEPY_EXTERNAL_BUILD_TYPE=Release ..
+            cmake -G"NMake Makefiles" -DGENEPY_EXTERNAL_BUILD_TYPE=Release ..
             nmake
             cd ..\..
             mkdir build; cd build
-            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+            cmake -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
             nmake install
       - run:
           name: Compile external dependencies
@@ -129,7 +129,7 @@ jobs:
             $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
             cd external
             mkdir build; cd build
-            cmake -G "NMake Makefiles" -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+            cmake -G"NMake Makefiles" -DSIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
             nmake
       - unless:
           condition:
@@ -141,7 +141,7 @@ jobs:
                   Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
                   $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   mkdir build; cd build
-                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release ..
+                  cmake -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ..
                   nmake
             - run:
                 name: Execute tests and generate JUnit XML report
@@ -167,7 +167,7 @@ jobs:
                   Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
                   $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   mkdir build; cd build
-                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+                  cmake -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
                   nmake
             - run:
                 name: Generate binary package
@@ -195,11 +195,11 @@ jobs:
             $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
             cd genepy\external
             mkdir build; cd build
-            cmake -G "MinGW Makefiles" -D GENEPY_EXTERNAL_BUILD_TYPE=Release ..
+            cmake -G"MinGW Makefiles" -DGENEPY_EXTERNAL_BUILD_TYPE=Release ..
             mingw32-make
             cd ..\..
             mkdir build; cd build
-            cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+            cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
             mingw32-make install
       - run:
           name: Compile external dependencies
@@ -207,7 +207,7 @@ jobs:
             $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
             cd external
             mkdir build; cd build
-            cmake -G "MinGW Makefiles" -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+            cmake -G"MinGW Makefiles" -DSIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
             mingw32-make
       - unless:
           condition:
@@ -218,7 +218,7 @@ jobs:
                 command: |
                   $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   mkdir build; cd build
-                  cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release ..
+                  cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
                   mingw32-make
             - run:
                 name: Execute tests and generate JUnit XML report
@@ -242,7 +242,7 @@ jobs:
                 command: |
                   $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   mkdir build; cd build
-                  cmake -G "MinGW Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTING=OFF ..
+                  cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
                   mingw32-make
             - run:
                 name: Generate binary package

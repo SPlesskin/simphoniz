@@ -16,11 +16,11 @@ library which must be installed beforehand.
 ```bash
 cd external
 mkdir build && cd build
-cmake -D SIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
+cmake -G"Unix Makefiles" -DSIMPHONIZ_EXTERNAL_BUILD_TYPE=Release ..
 make
 cd ../..
 mkdir build && cd build
-cmake -D CMAKE_BUILD_TYPE=Release ..
+cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
 sudo make install
 ```
 
