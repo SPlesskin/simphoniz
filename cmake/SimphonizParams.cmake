@@ -24,8 +24,7 @@ string(TOLOWER ${PROJECT_NAME} SIMPHONIZ_PROJECT_NAME_L)
 set(SIMPHONIZ_RESOURCE_DIR "${CMAKE_SOURCE_DIR}/resources")
 
 # Define the search path for CMake modules (but not only)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-list(APPEND CMAKE_MODULE_PATH ${SIMPHONIZ_RESOURCE_DIR}/nsis)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${SIMPHONIZ_RESOURCE_DIR}/nsis)
 
 # Locate the external dependencies
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/external/build/external")

@@ -34,7 +34,7 @@ set(SIMPHONIZ_EXECUTABLE_NAME ${SIMPHONIZ_APPLICATION}${CMAKE_EXECUTABLE_SUFFIX}
 # are usually set by find_package(Qt5...) calls.
 find_package(Qt5 REQUIRED COMPONENTS Core)
 
-target_link_libraries(${SIMPHONIZ_APPLICATION} PRIVATE common ${SIMPHONIZ_LIBRARY})
+target_link_libraries(${SIMPHONIZ_APPLICATION} PRIVATE ${SIMPHONIZ_COMPILER_CONFIGURATION} ${SIMPHONIZ_LIBRARY})
 
 # Install application
 # ===================
@@ -43,9 +43,9 @@ install(TARGETS ${SIMPHONIZ_APPLICATION} DESTINATION ${SIMPHONIZ_RUNTIME_INSTALL
 if(WIN32)
     if(MINGW)
         get_filename_component(SIMPHONIZ_MINGW_BIN_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
-        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libgcc_s_seh-1.dll")
-        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libwinpthread-1.dll")
-        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libstdc++-6.dll")
+        list(APPEND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${SIMPHONIZ_MINGW_BIN_DIR}/libgcc_s_seh-1.dll"
+                                                      "${SIMPHONIZ_MINGW_BIN_DIR}/libwinpthread-1.dll"
+                                                      "${SIMPHONIZ_MINGW_BIN_DIR}/libstdc++-6.dll")
     endif()
 
     # Install the Qt-related dependencies (libraries, plugins...) as well as the compiler runtime

@@ -41,15 +41,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Set warning flags
-add_library(common INTERFACE)
+# =================
+set(SIMPHONIZ_COMPILER_CONFIGURATION ${SIMPHONIZ_PROJECT_NAME_L}-cc)
+
+add_library(${SIMPHONIZ_COMPILER_CONFIGURATION} INTERFACE)
+
 if(MSVC)
     simphoniz_find_qt_include_dir(SIMPHONIZ_QT_INCLUDE_DIR)
 
     # The /external:* switch group disables warnings for third-party header files
     # (https://devblogs.microsoft.com/cppblog/broken-warnings-theory/).
-    target_compile_options(common INTERFACE /WX /W4
-                                            /experimental:external /external:I ${SIMPHONIZ_QT_INCLUDE_DIR} /external:W0)
+    target_compile_options(${SIMPHONIZ_COMPILER_CONFIGURATION} INTERFACE /WX /W4
+                                                                         /experimental:external /external:I ${SIMPHONIZ_QT_INCLUDE_DIR} /external:W0)
 else()
-    target_compile_options(common INTERFACE -Werror -pedantic-errors -Wall -Wextra -Wconversion
-                                            -Wsign-conversion)
+    target_compile_options(${SIMPHONIZ_COMPILER_CONFIGURATION} INTERFACE -Werror -pedantic-errors
+                                                                         -Wall -Wextra -Wconversion
+                                                                         -Wsign-conversion)
 endif()

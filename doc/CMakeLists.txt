@@ -32,11 +32,10 @@ if(SIMPHONIZ_USE_DOXYGEN)
 
         configure_file(Doxyfile.in Doxyfile @ONLY)
 
-        add_custom_target(doc
-                          COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-                          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                          COMMENT "Generating documentation..."
-                          VERBATIM)
+        add_custom_target(doc COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
+                              WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                              COMMENT "Generating documentation..."
+                              VERBATIM)
     else()
         message(STATUS "Doxygen not found, documentation won't be generated")
     endif()

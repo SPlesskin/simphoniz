@@ -30,17 +30,15 @@ if(BUILD_TESTING)
     add_definitions(-DTEST_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/resources")
 
     foreach(_file ${SIMPHONIZ_TEST_SOURCES})
-        get_filename_component(_dir ${_file} DIRECTORY)
-        get_filename_component(_name ${_file} NAME_WE)
+        get_filename_component(_test_name ${_file} NAME_WE)
 
         # List the source files of the current test
-        file(GLOB_RECURSE _sources "${_dir}/${_name}.*")
-        list(APPEND _sources ${SIMPHONIZ_TEST_COMMON_SOURCES})
-        list(APPEND _sources ${SIMPHONIZ_TEST_COMMON_HEADERS})
+        file(GLOB_RECURSE _test_sources src/${_test_name}.*)
+        list(APPEND _test_sources ${SIMPHONIZ_TEST_COMMON_SOURCES} ${SIMPHONIZ_TEST_COMMON_HEADERS})
 
-        add_executable(${_name} ${_sources})
-        target_link_libraries(${_name} PRIVATE common Qt5::Test ${SIMPHONIZ_LIBRARY})
+        add_executable(${_test_name} ${_test_sources})
+        target_link_libraries(${_test_name} PRIVATE ${SIMPHONIZ_COMPILER_CONFIGURATION} Qt5::Test ${SIMPHONIZ_LIBRARY})
 
-        add_test(NAME ${_name} COMMAND ${_name})
+        add_test(NAME ${_test_name} COMMAND ${_test_name})
     endforeach()
 endif()

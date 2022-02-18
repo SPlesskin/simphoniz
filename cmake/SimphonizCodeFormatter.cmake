@@ -19,9 +19,8 @@
 option(SIMPHONIZ_USE_CLANG_FORMAT "Use clang-format to automatically format C++ files" OFF)
 
 if(SIMPHONIZ_USE_CLANG_FORMAT)
-    find_program(SIMPHONIZ_CLANG_FORMAT_EXECUTABLE
-                 NAMES clang-format
-                 DOC "Path to clang-format executable.")
+    find_program(SIMPHONIZ_CLANG_FORMAT_EXECUTABLE NAMES clang-format
+                                                   DOC "Path to clang-format executable.")
 
     if(SIMPHONIZ_CLANG_FORMAT_EXECUTABLE)
         message(STATUS "clang-format found: ${SIMPHONIZ_CLANG_FORMAT_EXECUTABLE}")
@@ -31,8 +30,8 @@ if(SIMPHONIZ_USE_CLANG_FORMAT)
 
         # Formatting is automatically applied whenever the sources are compiled.
         add_custom_target(format ALL
-                          COMMAND ${SIMPHONIZ_CLANG_FORMAT_EXECUTABLE} -i -style=file ${files}
-                          COMMENT "Formatting code..."
-                          VERBATIM)
+                                 COMMAND ${SIMPHONIZ_CLANG_FORMAT_EXECUTABLE} -i -style=file ${files}
+                                 COMMENT "Formatting code..."
+                                 VERBATIM)
     endif()
 endif()

@@ -28,14 +28,14 @@ endfunction()
 
 function(simphoniz_copy_external_shared_libraries external_shared_libraries)
     if(WIN32)
-        foreach(target ${ARGN})
+        foreach(_target ${ARGN})
             # Third-party libraries should be used as imported targets.
-            get_target_property(location ${target} IMPORTED_LOCATION_RELEASE)
+            get_target_property(_location ${_target} IMPORTED_LOCATION_RELEASE)
 
             # Copy DLL near to the executable(s)
-            file(COPY ${location} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+            file(COPY ${_location} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-            list(APPEND ${external_shared_libraries} ${location})
+            list(APPEND ${external_shared_libraries} ${_location})
         endforeach()
     endif()
 

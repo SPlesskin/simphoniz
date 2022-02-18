@@ -35,9 +35,8 @@ set(SIMPHONIZ_LIBRARY ${SIMPHONIZ_PROJECT_NAME_L}-api)
 add_library(${SIMPHONIZ_LIBRARY} STATIC ${SIMPHONIZ_LIBRARY_SOURCES} ${SIMPHONIZ_LIBRARY_HEADERS})
 
 # https://foonathan.net/2018/10/cmake-warnings
-target_include_directories(${SIMPHONIZ_LIBRARY}
-                           PRIVATE ${SIMPHONIZ_INCLUDE_DIR}
-                           SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIR})
+target_include_directories(${SIMPHONIZ_LIBRARY} PRIVATE ${SIMPHONIZ_INCLUDE_DIR}
+                                                SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIR})
 
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Genepy 1.0.0 REQUIRED CONFIG)
@@ -47,13 +46,11 @@ if(UNIX)
     # On Linux systems, the iconv library must be linked to when Exiv2 is compiled statically.
     find_package(Iconv REQUIRED)
 
-    target_link_libraries(${SIMPHONIZ_LIBRARY}
-                          PUBLIC Qt5::Core Qt5::Widgets genepy::genepy
-                          PRIVATE common Iconv::Iconv exiv2lib)
+    target_link_libraries(${SIMPHONIZ_LIBRARY} PUBLIC Qt5::Core Qt5::Widgets genepy::genepy
+                                               PRIVATE ${SIMPHONIZ_COMPILER_CONFIGURATION} Iconv::Iconv exiv2lib)
 else()
-    target_link_libraries(${SIMPHONIZ_LIBRARY}
-                          PUBLIC Qt5::Core Qt5::Widgets genepy::genepy
-                          PRIVATE common exiv2lib)
+    target_link_libraries(${SIMPHONIZ_LIBRARY} PUBLIC Qt5::Core Qt5::Widgets genepy::genepy
+                                               PRIVATE ${SIMPHONIZ_COMPILER_CONFIGURATION} exiv2lib)
 
     # Windows has no RPATH mechanism or equivalent, so it only looks for DLLs in the same directory
     # as the executable or in the directories listed in the PATH environment variable.
