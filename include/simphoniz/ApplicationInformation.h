@@ -18,27 +18,21 @@
  */
 
 /**
- * @file CommandLineParsingResult.h
+ * @file ApplicationInformation.h
  * @author Erwan
- * @date 01/11/2019
+ * @date 17/02/2022
  */
 
-#ifndef SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
-#define SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
+#ifndef SIMPHONIZ_APPLICATIONINFORMATION_H
+#define SIMPHONIZ_APPLICATIONINFORMATION_H
+
+#include <genepy/application/ApplicationInformation.h>
 
 namespace simphoniz {
 
-/**
- * @brief Defines the possible outcomes of the command-line parsing.
- * @ingroup cli
- */
-enum class CommandLineParsingResult {
-    kOk,              ///< The parsing succeeded.
-    kKo,              ///< The parsing failed.
-    kHelpRequested,   ///< The help option was present.
-    kVersionRequested ///< The version option was present.
-};
+/// Holds information about this application.
+extern const genepy::ApplicationInformation kApplicationInformation;
 
 } // namespace simphoniz
 
-#endif // SIMPHONIZ_COMMANDLINEPARSINGRESULT_H
+#endif // SIMPHONIZ_APPLICATIONINFORMATION_H

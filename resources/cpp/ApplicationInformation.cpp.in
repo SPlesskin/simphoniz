@@ -18,27 +18,29 @@
  */
 
 /**
- * @file CommandLineData.h
+ * @file ApplicationInformation.cpp
  * @author Erwan
- * @date 01/11/2019
+ * @date 17/02/2022
  */
 
-#ifndef SIMPHONIZ_COMMANDLINEDATA_H
-#define SIMPHONIZ_COMMANDLINEDATA_H
+#include <simphoniz/ApplicationInformation.h>
 
-#include <QtCore/QDir>
+namespace {
+
+const auto kApplicationName = QStringLiteral("@PROJECT_NAME@");
+const auto kApplicationVersion = QVersionNumber::fromString(QStringLiteral("@PROJECT_VERSION@"));
+
+QString getApplicationDescription()
+{
+    return kApplicationName +
+           QStringLiteral(" allows sorting photos according to their creation time.");
+}
+
+} // namespace
 
 namespace simphoniz {
 
-/**
- * @brief Holds the data present in the command line.
- * @ingroup cli
- */
-struct CommandLineData {
-    QDir sourceDir;      ///< The source directory.
-    QDir destinationDir; ///< The destination directory.
-};
+const genepy::ApplicationInformation kApplicationInformation = {
+    kApplicationName, kApplicationVersion, getApplicationDescription()};
 
 } // namespace simphoniz
-
-#endif // SIMPHONIZ_COMMANDLINEDATA_H

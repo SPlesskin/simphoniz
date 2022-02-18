@@ -20,7 +20,8 @@
 # =====================
 set(SIMPHONIZ_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
-configure_file(${SIMPHONIZ_RESOURCE_DIR}/cpp/Application.cpp.in "${CMAKE_CURRENT_SOURCE_DIR}/Application.cpp" @ONLY)
+configure_file(${SIMPHONIZ_RESOURCE_DIR}/cpp/ApplicationInformation.cpp.in
+               "${CMAKE_CURRENT_SOURCE_DIR}/ApplicationInformation.cpp" @ONLY)
 
 file(GLOB_RECURSE SIMPHONIZ_LIBRARY_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 file(GLOB_RECURSE SIMPHONIZ_LIBRARY_HEADERS ${SIMPHONIZ_INCLUDE_DIR}/*.h
@@ -38,8 +39,8 @@ target_include_directories(${SIMPHONIZ_LIBRARY}
                            PRIVATE ${SIMPHONIZ_INCLUDE_DIR}
                            SYSTEM INTERFACE ${SIMPHONIZ_INCLUDE_DIR})
 
-find_package(Qt5 REQUIRED COMPONENTS Core)
-find_package(Genepy 0.6.0 REQUIRED CONFIG)
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
+find_package(Genepy 1.0.0 REQUIRED CONFIG)
 find_package(exiv2lib REQUIRED CONFIG NAMES exiv2)
 
 if(UNIX)
@@ -47,11 +48,11 @@ if(UNIX)
     find_package(Iconv REQUIRED)
 
     target_link_libraries(${SIMPHONIZ_LIBRARY}
-                          PUBLIC Qt5::Core genepy::genepy
+                          PUBLIC Qt5::Core Qt5::Widgets genepy::genepy
                           PRIVATE common Iconv::Iconv exiv2lib)
 else()
     target_link_libraries(${SIMPHONIZ_LIBRARY}
-                          PUBLIC Qt5::Core genepy::genepy
+                          PUBLIC Qt5::Core Qt5::Widgets genepy::genepy
                           PRIVATE common exiv2lib)
 
     # Windows has no RPATH mechanism or equivalent, so it only looks for DLLs in the same directory

@@ -23,15 +23,14 @@
  * @date 21/09/2019
  */
 
-#include <cstdio>
 #include <iostream>
 
+#include <genepy/application/ConsoleApplication.h>
+#include <genepy/cli/CommandLineParserBuilder.h>
 #include <genepy/cli/ProgressBar.h>
 #include <genepy/log/Logger.h>
 
-#include <simphoniz/Application.h>
-#include <simphoniz/cli/CommandLineData.h>
-#include <simphoniz/cli/CommandLineParser.h>
+#include <simphoniz/ApplicationInformation.h>
 #include <simphoniz/io/photo/PhotoDirectoryParser.h>
 #include <simphoniz/photo/PhotoDirectory.h>
 #include <simphoniz/processing/PhotoCounter.h>
@@ -50,46 +49,38 @@ using namespace simphoniz;
 
 int main(int argc, char** argv)
 {
-    Application app{argc, argv};
-
-    Q_UNUSED(app)
+    genepy::ConsoleApplication app{kApplicationInformation, argc, argv};
 
     /********************************************
      * Parse the command line
      ********************************************/
-    CommandLineParser parser;
-    auto data = CommandLineData{};
-    auto errorMessage = QString{};
-    switch (parser.doParsing(data, errorMessage)) {
-        case CommandLineParsingResult::kOk:
-            break;
-        case CommandLineParsingResult::kKo:
-            fputs(qPrintable(errorMessage), stderr);
-            fputs("\n\n", stderr);
-            fputs(qPrintable(parser.helpText()), stderr);
-            return 1;
-        case CommandLineParsingResult::kVersionRequested:
-            printf("%s %s\n", qPrintable(Application::applicationName()),
-                   qPrintable(Application::applicationVersion()));
-            return 0;
-        case CommandLineParsingResult::kHelpRequested:
-            parser.showHelp();
-    }
+    genepy::CommandLineParser parser =
+        genepy::CommandLineParser::create(app)
+            .addArgument(QStringLiteral("source"), QStringLiteral("The unsorted photo directory."),
+                         QStringLiteral("<source>"))
+            .addArgument(QStringLiteral("destination"),
+                         QStringLiteral("The sorted photo directory."),
+                         QStringLiteral("<destination>"));
+
+    parser.doParsing();
+
+    const auto sourceDir = parser.getArgumentValue<QDir>(QStringLiteral("source"));
+    const auto destinationDir = parser.getArgumentValue<QDir>(QStringLiteral("destination"));
 
     std::cout << kCopyrightNotice;
 
     /********************************************
      * Initialize the logging system
      ********************************************/
-    genepy::Logger::initialize(Application::applicationName(),
-                               QVersionNumber::fromString(Application::applicationVersion()));
+    genepy::Logger::initialize(&app);
 
     /********************************************
      * Search for the photos to sort
      ********************************************/
-    std::cout << "Analyzing directory " << data.sourceDir.absolutePath().toStdString() << "..."
+    std::cout << "Analyzing directory " << sourceDir.absolutePath().toStdString() << "..."
               << std::endl;
-    const auto photoDir = PhotoDirectoryParser{}.execute(data.sourceDir);
+
+    const auto photoDir = PhotoDirectoryParser{}.execute(sourceDir);
     if (!photoDir) {
         std::cerr << "No photo found!" << std::endl;
         return 1;
@@ -104,7 +95,7 @@ int main(int argc, char** argv)
 
     std::cout << "Processing " << count << " photo(s)..." << std::endl;
 
-    PhotoSorter sorter{data.destinationDir};
+    PhotoSorter sorter{destinationDir};
     genepy::ProgressBar progressBar{count};
 
     QObject::connect(&sorter, &PhotoSorter::photoSorted, &progressBar,
