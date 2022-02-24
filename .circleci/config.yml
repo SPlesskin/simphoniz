@@ -26,6 +26,19 @@ commands:
             --default-answer --accept-licenses --accept-obligations --email $Env:QT_ACCOUNT_EMAIL `
             --password $Env:QT_ACCOUNT_PASSWORD --confirm-command --no-default-installations `
             --verbose --mirror http://qt.mirror.constant.com
+  install-nsis:
+    description: "A command for installing NSIS on Windows"
+    steps:
+      - run:
+          name: Download NSIS installer
+          command: |
+            $ProgressPreference = 'SilentlyContinue'
+            Invoke-WebRequest -UserAgent "Wget" -URI https://prdownloads.sourceforge.net/nsis/nsis-3.08-setup.exe?download `
+            -OutFile $Env:HOMEPATH\nsis-3.08-setup.exe
+      - run:
+          name: Install NSIS
+          command: |
+            & "$Env:HOMEPATH\nsis-3.08-setup.exe" /S
 
 jobs:
   linux-build:
@@ -161,13 +174,14 @@ jobs:
           condition:
             equal: [master, << pipeline.git.branch >>]
           steps:
+            - install-nsis
             - run:
                 name: Compile Simphoniz
                 command: |
                   Import-BatchEnvironment 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat'
                   $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   mkdir build; cd build
-                  cmake -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
+                  cmake -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DSIMPHONIZ_USE_NSIS=ON ..
                   nmake
             - run:
                 name: Generate binary package
@@ -176,7 +190,7 @@ jobs:
                   $Env:Path = "C:\Qt\5.15.2\msvc2019_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   cd build
                   nmake package
-                  mkdir package; mv *.zip package
+                  mkdir package; mv *.exe package
             - store_artifacts:
                 path: build/package
 
@@ -237,12 +251,13 @@ jobs:
           condition:
             equal: [master, << pipeline.git.branch >>]
           steps:
+            - install-nsis
             - run:
                 name: Compile Simphoniz
                 command: |
                   $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   mkdir build; cd build
-                  cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF ..
+                  cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DSIMPHONIZ_USE_NSIS=ON ..
                   mingw32-make
             - run:
                 name: Generate binary package
@@ -250,7 +265,7 @@ jobs:
                   $Env:Path = "C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Qt\Tools\CMake_64\bin;$Env:Path"
                   cd build
                   mingw32-make package
-                  mkdir package; mv *.zip package
+                  mkdir package; mv *.exe package
             - store_artifacts:
                 path: build/package
 
